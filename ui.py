@@ -6,4 +6,10 @@ def display_board(board):
     Returns:
     Nothing 
     '''
-    pass
+    text = ""
+    for i in range(len(board)):
+        for e in range(len(board[i])):
+            text += board[i][e]
+        text += "\n"
+    print(text)
+
