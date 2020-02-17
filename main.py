@@ -2,15 +2,20 @@ from helpers import *
 import engine
 import ui
 
-PLAYER_ICON = '@'
-PLAYER_START_X = 3
+PLAYER_ICON = { "head": "☻",
+                "body": "/|\\",
+                "legs": "∏"
+                }
+PLAYER_START_X = 4
 PLAYER_START_Y = 3
 
 BOARD_WIDTH = 80
 BOARD_HEIGHT = 30
 
+WALL = "█"
 OBSTACLES = set()
-OBSTACLES.add("#")
+OBSTACLES.add(WALL)
+BACKGROUND = " "
 
 def init():
     player = create_player()
@@ -29,35 +34,44 @@ def create_player():
     player["x"] = PLAYER_START_X
     player["y"] = PLAYER_START_Y
     player["icon"] = PLAYER_ICON
+    player["height"] = len(PLAYER_ICON)
     return player
 
 
 def main(player):
 
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    #board = engine.put_player_on_board(board, player)
-
-    for i in range(BOARD_HEIGHT):
-        for e in range(BOARD_WIDTH):
-            if i == 0 or e == 0 or i == BOARD_HEIGHT-1 or e == BOARD_WIDTH-1:
-                board[i][e] = "#"
-            elif i == player["y"] and e == player["x"]:
-                board[i][e] = "@"
-            else:
-                board[i][e] = "."
+    board = engine.draw_walls_and_background(board, WALL, BACKGROUND)
+    board = engine.put_player_on_board(board, player)
 
     clear_screen()
     ui.display_board(board)
+    print(player)
+    ui.display_stats()
+    
     key = key_pressed()
 
     if key == 'w' and board[player["y"]-1][player["x"]] not in OBSTACLES:
         player["y"] -= 1
-    elif key == 's' and board[player["y"]+1][player["x"]] not in OBSTACLES:
+    elif key == 's' and board[player["y"] + player["height"]][player["x"]] not in OBSTACLES:
         player["y"] += 1
-    elif key == 'a' and board[player["y"]][player["x"]-1] not in OBSTACLES:
+    elif key == 'a' and board[player["y"]][player["x"]-3] not in OBSTACLES:
         player["x"] -= 1
     elif key == 'd' and board[player["y"]][player["x"]+1] not in OBSTACLES:
         player["x"] += 1
+    elif key == 'i':
+        ui.display_inv()
+        print("1.Heal", "2.Regen", "3.Exit")
+        option = input()
+        if option == "1":
+            if "HP Potion" in ui.inv:
+                ui.HP += 1
+                ui.inv.remove("HP Potion")
+            else:
+                print("No potions")
+                pass
+        if option == "3":
+            pass
     elif key == 'x':
         return
 
