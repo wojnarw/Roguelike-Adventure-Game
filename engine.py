@@ -51,9 +51,9 @@ def customize_character():
 def draw_walls_and_background(board, WALL, BACKGROUND):
 
     BOARD_HEIGHT = len(board)
-    for i in range(BOARD_HEIGHT):
-        BOARD_WIDTH = len(board[i])
+    BOARD_WIDTH = len(board[0])
 
+    for i in range(BOARD_HEIGHT):
         for e in range(BOARD_WIDTH):
             if i == 0 or e == 0 or i == BOARD_HEIGHT-1 or e == BOARD_WIDTH-1:
                 board[i][e] = WALL
@@ -62,12 +62,17 @@ def draw_walls_and_background(board, WALL, BACKGROUND):
     return board
 
 
-def draw_randomly(board, thing):
+def draw_randomly(board, item, max_items_in_row = 2):
 
     row_width = len(board[0])
-    max_width = 0
-    if isinstance(thing, list):
 
-        #max_width = len(max(thing))
-        #max_items_in_row = row width / max_width
+    if isinstance(item, list):
+        item_width = len(max(item))
         pass
+    elif isinstance(item, str):
+        item_width = len(item)
+
+    max_items_in_row = row_width / item_width / 4
+    
+
+    return board

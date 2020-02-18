@@ -2,9 +2,21 @@ from helpers import *
 import engine
 import ui
 
-PLAYER_ICON = { "head": "☻",
-                "body": "/|\\",
-                "legs": "∏"
+KEY_BINDINGS = set()
+KEY_BINDINGS = {"left": ("a", "4"),
+                "right": ("d", "6"),
+                "up": ("w", "8"),
+                "down": ("s", "2"),
+                "leftUP": ("q", "7"),
+                "leftDOWN": ("z", "1"),
+                "rightUP": ("e", "9"),
+                "rightDOWN": ("c", "3"),
+                "inventory": ("i"),
+                "exit": ("`", "x"),
+                }
+PLAYER_ICON = { "head":  "☻",
+                "body": "/▒\\", # body should be widest
+                "legs":  "∏"
                 }
 PLAYER_START_X = 4
 PLAYER_START_Y = 3
@@ -12,6 +24,7 @@ PLAYER_START_Y = 3
 BOARD_WIDTH = 80
 BOARD_HEIGHT = 30
 
+GRASS = "ˇ"
 WALL = "█"
 OBSTACLES = set()
 OBSTACLES.add(WALL)
@@ -35,6 +48,7 @@ def create_player():
     player["y"] = PLAYER_START_Y
     player["icon"] = PLAYER_ICON
     player["height"] = len(PLAYER_ICON)
+    player["width"] = len(PLAYER_ICON["body"])
     return player
 
 
@@ -50,16 +64,32 @@ def main(player):
     ui.display_stats()
     
     key = key_pressed()
-
-    if key == 'w' and board[player["y"]-1][player["x"]] not in OBSTACLES:
+    # I WILL REMOVE MAGIC NUMBERS BELOW LATER
+    # vertical movement
+    if key in KEY_BINDINGS["up"] and board[player["y"]-1][player["x"]] not in OBSTACLES:
         player["y"] -= 1
-    elif key == 's' and board[player["y"] + player["height"]][player["x"]] not in OBSTACLES:
+    elif key in KEY_BINDINGS["down"] and board[player["y"] + player["height"]][player["x"]] not in OBSTACLES:
         player["y"] += 1
-    elif key == 'a' and board[player["y"]][player["x"]-3] not in OBSTACLES:
+    # horiontal movement
+    elif key in KEY_BINDINGS["left"] and board[player["y"]][player["x"]-player["width"]] not in OBSTACLES:
         player["x"] -= 1
-    elif key == 'd' and board[player["y"]][player["x"]+1] not in OBSTACLES:
+    elif key in KEY_BINDINGS["right"] and board[player["y"]][player["x"]+1] not in OBSTACLES:
         player["x"] += 1
-    elif key == 'i':
+    # diagonal movement
+    elif key in KEY_BINDINGS["leftUP"] and board[player["y"]-1][player["x"]-player["width"]] not in OBSTACLES:
+        player["x"] -= 1
+        player["y"] -= 1
+    elif key in KEY_BINDINGS["rightUP"] and board[player["y"]-1][player["x"]+1] not in OBSTACLES:
+        player["x"] += 1
+        player["y"] -= 1
+    elif key in KEY_BINDINGS["leftDOWN"] and board[player["y"] + player["height"]][player["x"]-player["width"]] not in OBSTACLES:
+        player["x"] -= 1
+        player["y"] += 1
+    elif key in KEY_BINDINGS["rightDOWN"] and board[player["y"] + player["height"]][player["x"]+1] not in OBSTACLES:
+        player["x"] += 1
+        player["y"] += 1
+    # key binded options
+    elif key in KEY_BINDINGS["inventory"]:
         ui.display_inv()
         print("1.Heal", "2.Regen", "3.Exit")
         option = input()
@@ -72,7 +102,7 @@ def main(player):
                 pass
         if option == "3":
             pass
-    elif key == 'x':
+    elif key in KEY_BINDINGS["exit"]:
         return
 
     main(player)
