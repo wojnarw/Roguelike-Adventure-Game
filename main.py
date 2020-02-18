@@ -100,6 +100,12 @@ def main(player):
             else:
                 print("No potions")
                 pass
+        if option == "2":
+            if "Mana Potion" in ui.inv:
+                ui.MP += 10
+                ui.inv.remove("Mana Potion")
+        else:
+            print("No potions")
         if option == "3":
             pass
     elif key in KEY_BINDINGS["exit"]:
