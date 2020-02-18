@@ -1,6 +1,7 @@
 from helpers import *
 import engine
 import ui
+import stats
 
 KEY_BINDINGS = set()
 KEY_BINDINGS = {"left": ("a", "4"),
@@ -13,6 +14,7 @@ KEY_BINDINGS = {"left": ("a", "4"),
                 "rightDOWN": ("c", "3"),
                 "inventory": ("i"),
                 "exit": ("`", "x"),
+                "stats": ("b"),
                 }
 PLAYER_ICON = { "head":  "☻",
                 "body": "/▒\\", # body should be widest
@@ -61,7 +63,7 @@ def main(player):
     clear_screen()
     ui.display_board(board)
     print(player)
-    ui.display_stats()
+    stats.display_basic_stats()
     
     key = key_pressed()
     # I WILL REMOVE MAGIC NUMBERS BELOW LATER
@@ -91,23 +93,27 @@ def main(player):
     # key binded options
     elif key in KEY_BINDINGS["inventory"]:
         ui.display_inv()
-        print("1.Heal", "2.Regen", "3.Exit")
+        print("1.Heal", "2.Regen", "~~~Enter to Exit")
         option = input()
         if option == "1":
             if "HP Potion" in ui.inv:
-                ui.HP += 1
+                stats.HP += 1 + stats.Inteligence
+                if stats.HP >= stats.max_hp:
+                    stats.HP = stats.max_hp
                 ui.inv.remove("HP Potion")
             else:
                 print("No potions")
                 pass
         if option == "2":
             if "Mana Potion" in ui.inv:
-                ui.MP += 10
+                stats.MP += 10 + stats.Inteligence
                 ui.inv.remove("Mana Potion")
         else:
             print("No potions")
         if option == "3":
             pass
+    elif key in KEY_BINDINGS["stats"]:
+        stats.display_advenced_stats()
     elif key in KEY_BINDINGS["exit"]:
         return
 
