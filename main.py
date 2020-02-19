@@ -30,7 +30,18 @@ def create_player():
     player["icon"] = PLAYER_ICON
     player["height"] = 3
     player["width"] = 5 # body + 2 arms, emojis are wider than single character
-    #player = stats.add_stats(player)
+    player["HP"] = 5
+    player["MP"] = 10
+    player["lvl"] = 1
+    player["experience"] = 0
+    player["max_experience"] = 5    # Exp needed to lvl up
+    player["Inteligence"] = 1   # Stat making spells and potions deal/heal more
+    player["strength"] = 1      # Stat increasing attack dmg
+    player["endurance"] = 1     # Stat increasing max carry and max hp
+    player["charisma"] = 1      # Make it possible to get bonuses from events
+    player["max_hp"] = 10
+    player["max_player_carry"] = 10    # Maximum carrying size
+    player["attack"] = 1   # Dmg Player deal to enemies
     return player
     
 
@@ -41,7 +52,7 @@ def main(player, board):
     clear_screen()
     ui.display_board(board_with_player)
     print(player)
-    stats.display_basic_stats()
+    stats.display_basic_stats(player)
     
     key = key_pressed()
     # vertical movement
@@ -74,26 +85,26 @@ def main(player, board):
         option = input()
         if option == "1":
             if "HP Potion" in ui.inv:
-                stats.HP += 1 + stats.Inteligence
+                player["HP"] += 1 + player["Inteligence"]
                 # If current HP >= maxHP currentHP=MaxHP
-                if stats.HP >= stats.max_hp:
-                    stats.HP = stats.max_hp
+                if player["HP"] >= player["max_hp"]:
+                    player["HP"] = player["max_hp"]
                 ui.inv.remove("HP Potion")
             else:
                 print("No potions")
                 pass
         if option == "2":
             if "Mana Potion" in ui.inv:
-                stats.MP += 10 + stats.Inteligence
+                player["MP"] += 10 + player["Inteligence"]
                 ui.inv.remove("Mana Potion")
         else:
             print("No potions")
         if option == "3":
             #pass
-            stats.experience += 7
-            engine.level_up()
+            player["experience"] += 7   # Cheat
+            engine.level_up(player)
     elif key in KEY_BINDINGS["stats"]:
-        stats.display_advenced_stats()  # Display stats like attack dmg
+        stats.display_advenced_stats(player)  # Display stats like attack dmg
         pass
     elif key in KEY_BINDINGS["customize"]:
         engine.customize_character(player)

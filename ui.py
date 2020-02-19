@@ -22,13 +22,19 @@ def display_board(board):
 
 
 inv = {"HP Potion", "Mana Potion", "Beginner Sword"}
+inv_weight = 0
 
 
 def display_inv():
     print(inv)
-    max_player_carry = 10
-    listed_items = 0
+
+
+def weight(inv_weight):     # Items checking weight
     for i in inv:
-        listed_items += 1
-        if listed_items >= max_player_carry:
-            print("you can't carry more items")
+        inv_weight += 1
+
+
+def show_hall_of_fame():
+    with open('Score.csv') as file:
+        print(file)
+        input("Press enter")

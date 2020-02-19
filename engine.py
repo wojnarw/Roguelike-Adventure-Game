@@ -1,6 +1,8 @@
 import random
+import main
 import stats
 import copy
+import ui
 from const import *
 from helpers import key_pressed, clear_screen
 
@@ -162,17 +164,42 @@ def generate_random_things_on_map(board, item, max_items_in_row = 4, max_items_i
     return board
 
 
-def level_up():
-    if stats.experience >= stats.max_experience:
+def level_up(player):
+    if player["experience"] >= player["max_experience"]:
         # If more then needed experience to lvl up experience converted to
         # another lvl progress:
-        experience_remainder = stats.experience - stats.max_experience
-        stats.max_experience += 5
-        stats.experience = 0 + experience_remainder
-        stats.lvl += 1
-        stats.Inteligence += 2
-        stats.strength += 2
-        stats.endurance += 2
-        stats.charisma += 2
-        stats.max_hp += stats.endurance - 1
-        stats.max_player_carry += stats.endurance - 1
+        experience_remainder = player["experience"] - player["max_experience"]
+        player["max_experience"] += 5
+        player["experience"] = 0 + experience_remainder
+        player["lvl"] += 1
+        player["Inteligence"] += 2
+        player["strength"] += 2
+        player["endurance"] += 2
+        player["charisma"] += 2
+        player["max_hp"] += player["endurance"]
+        player["max_player_carry"] += player["endurance"]
+        player["attack"] = player["strength"]
+        stats.player_score += 200
+
+
+def high_score(player):
+    with open('Score.csv', 'a') as file:
+        nickname = input("Congratulations!\n You achived top score \n"
+                         "What's your name ?")
+        file.write("\n" + nickname + "|" +
+                   "Highscore = " + str(stats.player_score) +
+                   "|" + "Level = " + str(player["lvl"]) +
+                   "|" + "Monsters killed = " + str(stats.monsters_kill))
+
+
+def max_player_weight_reached():    # Everytime player tries to store something
+    if stats.max_player_carry == ui.inv_weight:
+        print("You reached maximum weight limit")
+    if stats.max_player_carry > ui.inv_weight:
+        print("You can't carry this item")
+        ui.inv.pop[-1]
+
+
+def monster_kill():
+    stats.monsters_kill += 1
+    stats.player_score += 10
