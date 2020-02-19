@@ -14,7 +14,7 @@ KEY_BINDINGS = {"left": ("a", "4"),
                 "rightDOWN": ("c", "3"),
                 "inventory": ("i"),
                 "exit": ("`", "x"),
-                "stats": ("b"),
+                "stats": ("b"),     # For now this shows advenced stats
                 }
 PLAYER_ICON = { "head":  "☻",
                 "body": "/▒\\", # body should be widest
@@ -98,6 +98,7 @@ def main(player):
         if option == "1":
             if "HP Potion" in ui.inv:
                 stats.HP += 1 + stats.Inteligence
+                # If current HP >= maxHP currentHP=MaxHP
                 if stats.HP >= stats.max_hp:
                     stats.HP = stats.max_hp
                 ui.inv.remove("HP Potion")
@@ -111,9 +112,11 @@ def main(player):
         else:
             print("No potions")
         if option == "3":
-            pass
+            #pass
+            stats.experience += 7
+            engine.level_up()
     elif key in KEY_BINDINGS["stats"]:
-        stats.display_advenced_stats()
+        stats.display_advenced_stats()  # Display stats like attack dmg
     elif key in KEY_BINDINGS["exit"]:
         return
 

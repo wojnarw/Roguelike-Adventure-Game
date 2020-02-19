@@ -1,4 +1,5 @@
 import random
+import stats
 
 def create_board(width, height):
     '''
@@ -76,3 +77,19 @@ def draw_randomly(board, item, max_items_in_row = 2):
     
 
     return board
+
+
+def level_up():     # Player lvl up
+    if stats.experience >= stats.max_experience:
+        # If more then needed experience to lvl up experience converted to
+        # another lvl progress:
+        experience_remainder = stats.experience - stats.max_experience
+        stats.max_experience += 5
+        stats.experience = 0 + experience_remainder
+        stats.lvl += 1
+        stats.Inteligence += 2
+        stats.strength += 2
+        stats.endurance += 2
+        stats.charisma += 2
+        stats.max_hp += stats.endurance - 1
+        stats.max_player_carry += stats.endurance - 1
