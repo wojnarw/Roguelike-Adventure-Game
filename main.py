@@ -1,40 +1,19 @@
 from helpers import *
+from const import *
 import engine
 import ui
 import stats
 
-KEY_BINDINGS = set()
-KEY_BINDINGS = {"left": ("a", "4"),
-                "right": ("d", "6"),
-                "up": ("w", "8"),
-                "down": ("s", "2"),
-                "leftUP": ("q", "7"),
-                "leftDOWN": ("z", "1"),
-                "rightUP": ("e", "9"),
-                "rightDOWN": ("c", "3"),
-                "inventory": ("i"),
-                "exit": ("`", "x"),
-                "stats": ("b"),     # For now this shows advenced stats
-                }
-PLAYER_ICON = { "head":  "☻",
-                "body": "/▒\\", # body should be widest
-                "legs":  "∏"
-                }
-PLAYER_START_X = 4
-PLAYER_START_Y = 3
-
-BOARD_WIDTH = 80
-BOARD_HEIGHT = 30
-
-GRASS = "ˇ"
-WALL = "█"
-OBSTACLES = set()
-OBSTACLES.add(WALL)
-BACKGROUND = " "
 
 def init():
     player = create_player()
-    main(player)
+    board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
+    board = engine.draw_walls_and_background(board, WALL, BACKGROUND)
+    board = engine.generate_random_things_on_map(board, GRASS, 10, 5)
+    #board = engine.generate_random_things_on_map(board, "🌷", 1, 5)
+    board = engine.generate_random_things_on_map(board, TREE, 4, 3)
+    board = engine.generate_random_things_on_map(board, BUSH, 2, 2)
+    main(player, board)
 
 
 def create_player():
@@ -49,45 +28,43 @@ def create_player():
     player["x"] = PLAYER_START_X
     player["y"] = PLAYER_START_Y
     player["icon"] = PLAYER_ICON
-    player["height"] = len(PLAYER_ICON)
-    player["width"] = len(PLAYER_ICON["body"])
+    player["height"] = 3
+    player["width"] = 5 # body + 2 arms, emojis are wider than single character
+    #player = stats.add_stats(player)
     return player
+    
 
+def main(player, board):
 
-def main(player):
-
-    board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    board = engine.draw_walls_and_background(board, WALL, BACKGROUND)
-    board = engine.put_player_on_board(board, player)
+    board_with_player = engine.put_player_on_board(board, player)
 
     clear_screen()
-    ui.display_board(board)
+    ui.display_board(board_with_player)
     print(player)
     stats.display_basic_stats()
     
     key = key_pressed()
-    # I WILL REMOVE MAGIC NUMBERS BELOW LATER
     # vertical movement
-    if key in KEY_BINDINGS["up"] and board[player["y"]-1][player["x"]] not in OBSTACLES:
+    if key in KEY_BINDINGS["up"] and board[player["y"]-1][player["x"]] in PASSABLE:
         player["y"] -= 1
-    elif key in KEY_BINDINGS["down"] and board[player["y"] + player["height"]][player["x"]] not in OBSTACLES:
+    elif key in KEY_BINDINGS["down"] and board[player["y"] + player["height"]][player["x"]] in PASSABLE:
         player["y"] += 1
     # horiontal movement
-    elif key in KEY_BINDINGS["left"] and board[player["y"]][player["x"]-player["width"]] not in OBSTACLES:
+    elif key in KEY_BINDINGS["left"] and board[player["y"]][player["x"]-player["width"]] in PASSABLE:
         player["x"] -= 1
-    elif key in KEY_BINDINGS["right"] and board[player["y"]][player["x"]+1] not in OBSTACLES:
+    elif key in KEY_BINDINGS["right"] and board[player["y"]][player["x"]+1] in PASSABLE:
         player["x"] += 1
     # diagonal movement
-    elif key in KEY_BINDINGS["leftUP"] and board[player["y"]-1][player["x"]-player["width"]] not in OBSTACLES:
+    elif key in KEY_BINDINGS["leftUP"] and board[player["y"]-1][player["x"]-player["width"]] in PASSABLE:
         player["x"] -= 1
         player["y"] -= 1
-    elif key in KEY_BINDINGS["rightUP"] and board[player["y"]-1][player["x"]+1] not in OBSTACLES:
+    elif key in KEY_BINDINGS["rightUP"] and board[player["y"]-1][player["x"]+1] in PASSABLE:
         player["x"] += 1
         player["y"] -= 1
-    elif key in KEY_BINDINGS["leftDOWN"] and board[player["y"] + player["height"]][player["x"]-player["width"]] not in OBSTACLES:
+    elif key in KEY_BINDINGS["leftDOWN"] and board[player["y"] + player["height"]][player["x"]-player["width"]] in PASSABLE:
         player["x"] -= 1
         player["y"] += 1
-    elif key in KEY_BINDINGS["rightDOWN"] and board[player["y"] + player["height"]][player["x"]+1] not in OBSTACLES:
+    elif key in KEY_BINDINGS["rightDOWN"] and board[player["y"] + player["height"]][player["x"]+1] in PASSABLE:
         player["x"] += 1
         player["y"] += 1
     # key binded options
@@ -117,10 +94,13 @@ def main(player):
             engine.level_up()
     elif key in KEY_BINDINGS["stats"]:
         stats.display_advenced_stats()  # Display stats like attack dmg
+        pass
+    elif key in KEY_BINDINGS["customize"]:
+        engine.customize_character(player)
     elif key in KEY_BINDINGS["exit"]:
         return
 
-    main(player)
+    main(player, board)
 
 
 if __name__ == '__main__':

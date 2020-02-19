@@ -24,3 +24,7 @@ def display_advenced_stats():
           "Max inventory size =", max_player_carry,
           "Attack Damage =", attack,)
     input("Press enter")
+
+def add_stats(player):
+      player["strength"] = 1        # Stat increasing attack dmg
+      return player

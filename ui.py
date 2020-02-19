@@ -4,11 +4,20 @@ def display_board(board):
     Returns:
     Nothing
     '''
-    text = ""
+    lines = []
     for i in range(len(board)):
+        lines.append("")
         for e in range(len(board[i])):
-            text += board[i][e]
-        text += "\n"
+            lines[i] += board[i][e]
+
+    lines[1] += " CONTROLS"
+    lines[2] += " Movement: WSAD or numerical keyboard"
+    lines[3] += " I - inventory"
+    lines[4] += " K - character customization"
+
+    #lines[-5] = 
+
+    text = "\n".join(lines)
     print(text)
 
 
