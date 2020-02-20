@@ -7,22 +7,19 @@ import stats
 
 def init():
     player = stats.create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON)
-    board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
-    board = engine.draw_walls_and_background(board, WALL, BACKGROUND)
-    board = engine.generate_random_things_on_map(board, GRASS, 20, 5)
-    #board = engine.generate_random_things_on_map(board, ENEMIES["small"]["icon"], 1, 1)
+    board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT, "map1")
+    #board = engine.draw_walls_and_background(board, WALL, BACKGROUND)
+    #board = engine.generate_random_things_on_map(board, GRASS, 20, 5)
 
-    #board = enemies.place_enemies(board)
-    #board = engine.generate_random_things_on_map(board, "🌷", 1, 5)
-
-    board = engine.generate_random_things_on_map(board, TREE3, 4, 3)
-    board = engine.generate_random_things_on_map(board, TREE4, 4, 3)
-    #board = engine.generate_random_things_on_map(board, BUSH, 2, 2)
+    #board = engine.generate_random_things_on_map(board, TREES[0], 4,4)
+    #board = engine.generate_random_things_on_map(board, TREES[1], 3,3)
+    #board = engine.generate_random_things_on_map(board, TREES[2], 4,4)
     main(player, board)
 
 
 def main(player, board):
-
+    global word_used
+    
     board_with_player = engine.put_player_on_board(board, player)
 
     clear_screen()
@@ -30,27 +27,39 @@ def main(player, board):
     print(f"\n\tPLAYER X:{player['x']} Y:{player['y']}")
     
     key = key_pressed()
+    around_player = 2
+    
+    # collisions check
+    no_obstacle_on_up = board[player["y"]-around_player][player["x"]] in PASSABLE
+    no_obstacle_on_down = board[player["y"] + around_player][player["x"]] in PASSABLE
+    no_obstacle_on_left = board[player["y"]][player["x"]-around_player] in PASSABLE and board[player["y"]+1][player["x"]-around_player] in PASSABLE
+    no_obstacle_on_right = board[player["y"]][player["x"]+around_player] in PASSABLE and board[player["y"]+1][player["x"]+around_player] in PASSABLE
+    no_obstacle_on_leftUP = board[player["y"]-around_player][player["x"]-around_player] in PASSABLE
+    no_obstacle_on_rightUP = board[player["y"]-around_player][player["x"]+around_player] in PASSABLE
+    no_obstacle_on_leftDOWN = board[player["y"] + around_player][player["x"]-around_player] in PASSABLE
+    no_obstacle_on_rightDOWN = board[player["y"] + around_player][player["x"]+around_player] in PASSABLE
+
     # vertical movement
-    if key in KEY_BINDINGS["up"] and board[player["y"]-1][player["x"]] in PASSABLE:
+    if key in KEY_BINDINGS["up"] and no_obstacle_on_up:
         player["y"] -= 1
-    elif key in KEY_BINDINGS["down"] and board[player["y"] + player["height"]][player["x"]] in PASSABLE:
+    elif key in KEY_BINDINGS["down"] and no_obstacle_on_down:
         player["y"] += 1
     # horiontal movement
-    elif key in KEY_BINDINGS["left"] and board[player["y"]][player["x"]-player["width"]] in PASSABLE:
+    elif key in KEY_BINDINGS["left"] and no_obstacle_on_left:
         player["x"] -= 1
-    elif key in KEY_BINDINGS["right"] and board[player["y"]][player["x"]+1] in PASSABLE:
+    elif key in KEY_BINDINGS["right"] and no_obstacle_on_right:
         player["x"] += 1
     # diagonal movement
-    elif key in KEY_BINDINGS["leftUP"] and board[player["y"]-1][player["x"]-player["width"]] in PASSABLE:
+    elif key in KEY_BINDINGS["leftUP"] and no_obstacle_on_leftUP:
         player["x"] -= 1
         player["y"] -= 1
-    elif key in KEY_BINDINGS["rightUP"] and board[player["y"]-1][player["x"]+1] in PASSABLE:
+    elif key in KEY_BINDINGS["rightUP"] and no_obstacle_on_rightUP:
         player["x"] += 1
         player["y"] -= 1
-    elif key in KEY_BINDINGS["leftDOWN"] and board[player["y"] + player["height"]][player["x"]-player["width"]] in PASSABLE:
+    elif key in KEY_BINDINGS["leftDOWN"] and no_obstacle_on_leftDOWN:
         player["x"] -= 1
         player["y"] += 1
-    elif key in KEY_BINDINGS["rightDOWN"] and board[player["y"] + player["height"]][player["x"]+1] in PASSABLE:
+    elif key in KEY_BINDINGS["rightDOWN"] and no_obstacle_on_rightDOWN:
         player["x"] += 1
         player["y"] += 1
     # key binded options
@@ -67,7 +76,8 @@ def main(player, board):
     elif key in KEY_BINDINGS["story"]:
         ui.show_story()
     elif key in KEY_BINDINGS["verbal_attack"]:
-        ui.verbal_attack(board_with_player, player)
+        word_used = ui.verbal_attack(board_with_player, player, word_used)
+        key_pressed()
 
     elif key in KEY_BINDINGS["inventory"]:
         ui.display_inv()

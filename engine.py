@@ -4,10 +4,10 @@ import stats
 import copy
 import ui
 from const import *
+from maps import *
 from helpers import key_pressed, clear_screen
 
-
-def create_board(width, height, filename = ""):
+def create_board(width, height, maps = ""):
     '''
     Creates game board based on input parameters.
 
@@ -19,20 +19,38 @@ def create_board(width, height, filename = ""):
     list: Game board
     '''
     board = []
-    if not filename:
-        for i in range(height):
+    if not maps:
+        for line in range(height):
             board.append([])
             for e in range(width):
-                board[i].append("")
+                board[line].append("")
         return board
+    
+    chosen_map = MAPS[random.randint(0,len(MAPS)-1)]
+    chosen_map = chosen_map.split("\n")
+    if len(chosen_map) < height:
+        for y in range(height - len(chosen_map)):
+            chosen_map.append("")
 
-    try:
+    for line in range(height):
+        board.append([])
+        for e in range(width):
+            if len(chosen_map[line]) < width:
+                board[line].append(chosen_map[line][e] * (width - len(chosen_map[line])))
+            board[line].append(chosen_map[line][e])
+    return board
+
+
+    """try:
         with open(filename,"r") as file:
             for line in file:
-                pass
+                board.append([])
+                for e in range(width):
+                    board[line].append(line[e])
 
     except FileNotFoundError:
-        print(f"File '{path_and_filename}' not found!")
+        print(f"\tFile '{path_and_filename}' not found!")
+        input()"""
 
 
 def put_player_on_board(original_board, player):
@@ -54,7 +72,20 @@ def put_player_on_board(original_board, player):
     board = copy.deepcopy(original_board)
 
     # EMOJIS TAKE 2 SPACES EACH WHEN DISPLAYED
-    board[y][x-3] = player["icon"]["head"]
+    board[y-1][x] = player["icon"]["head"]
+    board[y-1][x+1] = ""
+
+    board[y][x-1] = player["icon"]["leftHand"]
+    board[y][x] = player["icon"]["body"]
+    #board[y][x+1] = player["icon"]["rightHand"]
+    board[y][x+1] = ""
+    #board[y][x+3] = ""
+
+    board[y+1][x] = player["icon"]["legs"]
+    board[y+1][x+1] = ""
+
+    # old version with X and Y of player in its right top corner
+    """board[y][x-3] = player["icon"]["head"]
     board[y][x-2] = ""
 
     board[y+1][x-4] = player["icon"]["leftHand"]
@@ -65,6 +96,7 @@ def put_player_on_board(original_board, player):
 
     board[y+2][x-3] = player["icon"]["legs"]
     board[y+2][x-2] = ""
+    """
 
     return board
 
@@ -135,6 +167,7 @@ def generate_random_things_on_map(board, item, max_items_in_row = 4, max_items_i
     board_height = len(board)
 
     if isinstance(item, list):
+        
         item_height = len(item)
         item_width = len(max(item))
         for i in range(item_height):

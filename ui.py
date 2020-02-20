@@ -13,14 +13,17 @@ color_key = {
         '▓': "green",
         '|': "red",
         'Y': "red",
-        '║': "red",
         '∏': "red",
         '\\': "green",
         '/': "green",
         'ˇ': "green",
         '˯': "green",
         'ˬ': "green",
-        '^': "green"
+        '^': "green",
+        '‡': "yellow",
+        '║': "yellow",
+        const.ENEMIES["big"]["icon"]: "red",
+        const.ENEMIES["small"]["icon"]: "red"
         }
 
 def display_board(board, player):
@@ -183,26 +186,33 @@ def show_story():
     input()
 
 
-def verbal_attack(board_with_player, player):
+def verbal_attack(board_with_player, player, used):
 
-    say_time = 2
     texts = ["Tylko Bóg może mnie sądzić",
-             "Nie sąd cię skaże wiedźmo",
-             "Wiem do której Biedronki chodzisz na zakupy",
+             "Nie sąd cię skaże wiedźmi sługo",
+             "Widziałem cię w Żabce na kasie",
              "Pchasz się w gips, kolego",
              "Masz niedobór żelaza pod żebrami?",
              "HA TFU!"
              ]
-
+    # make random not repeat last choice
     choose = random.randint(0, len(texts)-1)
 
-    for i in range(len(texts[choose])):
-        board_with_player[player["y"]-1][player["x"] + i + 2] = texts[choose][i]
+    while choose == used:
+        choose = random.randint(0, len(texts)-1)
+        print(choose)
+
+    player_say(board_with_player, player, texts[choose])
+    return choose
+
+
+def player_say(board_with_player, player, sentence):
+
+    for i in range(len(sentence)):
+        board_with_player[player["y"]-1][player["x"] + i + 2] = sentence[i]
 
     clear_screen()
     display_board(board_with_player, player)
-    #time.sleep(say_time)
-    input("\tPress Enter")
 
 
 def show_logo_animation(logo):
