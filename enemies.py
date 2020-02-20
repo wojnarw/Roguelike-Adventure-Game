@@ -14,13 +14,14 @@ def small_monster_kill(player):
     
 def large_monster_kill(player):
     stats.monsters_kill += 1
-    stats.player_score += 10
-    player["experience"] += 20
+    stats.player_score += 30
+    player["experience"] += 50
     return True
 
 def boss_monster_kill(player):
     stats.monsters_kill += 1
     stats.player_score += 250
+    return True
     
 
 def fight_with_monsters_small(player):
@@ -336,18 +337,3 @@ def fight_with_monsters_boss(player):
             fight_with_monsters_boss(player)
 
 
-def small_monster_kill(player):
-    stats.monsters_kill += 1
-    stats.player_score += 10
-    player["experience"] += 20
-
-
-def large_monster_kill(player):
-    stats.monsters_kill += 1
-    stats.player_score += 30
-    player["experience"] += 50
-
-
-def boss_monster_kill(player):
-    stats.monsters_kill += 1
-    stats.player_score += 250
