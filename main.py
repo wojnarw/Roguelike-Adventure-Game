@@ -101,13 +101,13 @@ def main(player, board):
             print("No potions")
         if option == "3":
             #pass
-            player["experience"] += 60   # Cheat
+            player["experience"] += 100   # Cheat
             player["HP"] += 5
             player["max_hp"] += 5
             stats.level_up(player)
     elif key in KEY_BINDINGS["stats"]:
         stats.display_advenced_stats(player)  # Display stats like attack dmg
-        engine.fight_with_monsters_small(player)
+        engine.fight_with_monsters_large(player)
         pass
     elif key in KEY_BINDINGS["exit"]:
         return

@@ -2,8 +2,10 @@ import main
 from const import *
 player_score = 0
 monsters_kill = 0
-monster_hp = ENEMIES["small"]["HP"]
-monster_dmg = ENEMIES["small"]["DMG"]
+small_monster_hp = ENEMIES["small"]["HP"]
+small_monster_dmg = ENEMIES["small"]["DMG"]
+large_monster_hp = ENEMIES["big"]["HP"]
+large_monster_dmg = ENEMIES["big"]["DMG"]
 
 
 def create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON):
@@ -72,29 +74,17 @@ def level_up(player):
         player_score += 200
 
 
-def taking_dmg(player):
-    player["HP"] -= monster_dmg
-    print("HP -" + str(monster_dmg))
+def small_taking_dmg(player):
+    player["HP"] -= small_monster_dmg
+    print("HP -" + str(small_monster_dmg))
     if player["HP"] <= 0:
         print("Przegrana")
         raise SystemExit
 
 
-'''def drinking_potions(player):
-      key = key_pressed()
-      if key == "1":
-            if "HP Potion" in ui.inv:
-                player["HP"] += 1 + player["intelligence"]
-                # If current HP >= maxHP currentHP=MaxHP
-                if player["HP"] >= player["max_hp"]:
-                    player["HP"] = player["max_hp"]
-                ui.inv.remove("HP Potion")
-            else:
-                print("No potions")
-                pass
-      if key == "2":
-            if "Mana Potion" in ui.inv:
-                player["MP"] += 10 + player["intelligence"]
-                ui.inv.remove("Mana Potion")
-            else:
-                  print("No potions")'''
+def large_taking_dmg(player):
+    player["HP"] -= large_monster_dmg
+    print("HP -" + str(large_monster_dmg))
+    if player["HP"] <= 0:
+        print("Przegrana")
+        raise SystemExit
