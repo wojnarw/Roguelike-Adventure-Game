@@ -1,9 +1,10 @@
 import main
-import ui
+from const import *
 player_score = 0
 monsters_kill = 0
-monster_hp = 0
-monster_dmg = 1
+monster_hp = ENEMIES["small"]["HP"]
+monster_dmg = ENEMIES["small"]["DMG"]
+
 
 def create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON):
     '''
@@ -18,7 +19,7 @@ def create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON):
         "y": PLAYER_START_Y,
         "icon": PLAYER_ICON,
         "height": 3,
-        "width": 5, # body + 2 arms, emojis are wider than single character
+        "width": 5,  # body + 2 arms, emojis are wider than single character
         "HP": 5,
         "MP": 10,
         "lvl": 1,
@@ -72,14 +73,14 @@ def level_up(player):
 
 
 def taking_dmg(player):
-      player["HP"] -= monster_dmg
-      print("HP -" + str(monster_dmg))
-      if player["HP"] <= 0:
-            print("Przegrana")
-            raise SystemExit
+    player["HP"] -= monster_dmg
+    print("HP -" + str(monster_dmg))
+    if player["HP"] <= 0:
+        print("Przegrana")
+        raise SystemExit
 
 
-def drinking_potions(player):
+'''def drinking_potions(player):
       key = key_pressed()
       if key == "1":
             if "HP Potion" in ui.inv:
@@ -96,4 +97,4 @@ def drinking_potions(player):
                 player["MP"] += 10 + player["intelligence"]
                 ui.inv.remove("Mana Potion")
             else:
-                  print("No potions")
+                  print("No potions")'''
