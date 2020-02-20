@@ -22,7 +22,7 @@ def boss_monster_kill(player):
     stats.monsters_kill += 1
     stats.player_score += 250
     return True
-    
+
 
 def fight_with_monsters_small(player):
     while stats.small_monster_hp > 0:
@@ -96,7 +96,7 @@ def fight_with_monsters_small(player):
             key = key_pressed()
             if key == "1":
                 if "HP Potion" in ui.inv:
-                    player["HP"] += 1 + player["intelligence"]
+                    player["HP"] += 4 + player["intelligence"]
                     # If current HP >= maxHP currentHP=MaxHP
                     if player["HP"] >= player["max_hp"]:
                         player["HP"] = player["max_hp"]
@@ -128,6 +128,8 @@ def fight_with_monsters_small(player):
         if key not in KEY_BINDINGS_FIGHT:
             fight_with_monsters_small(player)
 
+    return True
+    
 
 def fight_with_monsters_large(player):
     while stats.large_monster_hp > 0:
@@ -156,7 +158,7 @@ def fight_with_monsters_large(player):
                     if stats.large_monster_hp <= 0:
                         print("You killed monster")
                         large_monster_kill(player)
-                        continue
+                        return True
                     else:
                         stats.large_taking_dmg(player)
                         fight_with_monsters_large(player)
@@ -200,7 +202,7 @@ def fight_with_monsters_large(player):
             key = key_pressed()
             if key == "1":
                 if "HP Potion" in ui.inv:
-                    player["HP"] += 1 + player["intelligence"]
+                    player["HP"] += 4 + player["intelligence"]
                     # If current HP >= maxHP currentHP=MaxHP
                     if player["HP"] >= player["max_hp"]:
                         player["HP"] = player["max_hp"]
@@ -232,6 +234,8 @@ def fight_with_monsters_large(player):
         if key not in KEY_BINDINGS_FIGHT:
             fight_with_monsters_large(player)
 
+    return True
+
 
 def fight_with_monsters_boss(player):
     while stats.boss_monster_hp > 0:
@@ -260,7 +264,7 @@ def fight_with_monsters_boss(player):
                     if stats.boss_monster_hp <= 0:
                         print("You killed monster")
                         boss_monster_kill(player)
-                        continue
+                        return True
                     else:
                         stats.boss_taking_dmg(player)
                         fight_with_monsters_boss(player)
@@ -304,7 +308,7 @@ def fight_with_monsters_boss(player):
             key = key_pressed()
             if key == "1":
                 if "HP Potion" in ui.inv:
-                    player["HP"] += 1 + player["intelligence"]
+                    player["HP"] += 4 + player["intelligence"]
                     # If current HP >= maxHP currentHP=MaxHP
                     if player["HP"] >= player["max_hp"]:
                         player["HP"] = player["max_hp"]
@@ -336,4 +340,4 @@ def fight_with_monsters_boss(player):
         if key not in KEY_BINDINGS_FIGHT:
             fight_with_monsters_boss(player)
 
-
+    return True
