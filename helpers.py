@@ -1,4 +1,7 @@
+import os
+
 def key_pressed():
+    
     import sys
 
     try:
@@ -25,10 +28,15 @@ def key_pressed():
         return ch
 
 
-def clear_screen():
-    import os
-
-    if os.name == "nt":
-        os.system('cls')
-    else:
-        os.system('clear')
+def clear_screen(n =500):
+    
+    #if os.name == "nt":
+    #    os.system('cls')
+    #else:
+    #    os.system('clear')
+    
+    os.system('clear')
+    #if n == 0:
+    #    os.system('clear')
+    #else:
+    #    print('\b'*n)

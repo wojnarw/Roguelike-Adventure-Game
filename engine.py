@@ -164,24 +164,6 @@ def generate_random_things_on_map(board, item, max_items_in_row = 4, max_items_i
     return board
 
 
-def level_up(player):
-    if player["experience"] >= player["max_experience"]:
-        # If more then needed experience to lvl up experience converted to
-        # another lvl progress:
-        experience_remainder = player["experience"] - player["max_experience"]
-        player["max_experience"] += 5
-        player["experience"] = 0 + experience_remainder
-        player["lvl"] += 1
-        player["Inteligence"] += 2
-        player["strength"] += 2
-        player["endurance"] += 2
-        player["charisma"] += 2
-        player["max_hp"] += player["endurance"]
-        player["max_player_carry"] += player["endurance"]
-        player["attack"] = player["strength"]
-        stats.player_score += 200
-
-
 def high_score(player):
     with open('Score.csv', 'a') as file:
         nickname = input("Congratulations!\n You achived top score \n"

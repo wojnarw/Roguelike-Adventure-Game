@@ -1,4 +1,4 @@
-from helpers import *
+from helpers import key_pressed, clear_screen
 from const import *
 import engine
 import ui
@@ -9,10 +9,15 @@ def init():
     player = create_player()
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
     board = engine.draw_walls_and_background(board, WALL, BACKGROUND)
-    board = engine.generate_random_things_on_map(board, GRASS, 10, 5)
+    board = engine.generate_random_things_on_map(board, GRASS, 20, 5)
+    #board = engine.generate_random_things_on_map(board, ENEMIES["small"]["icon"], 1, 1)
+
+    #board = enemies.place_enemies(board)
     #board = engine.generate_random_things_on_map(board, "🌷", 1, 5)
-    board = engine.generate_random_things_on_map(board, TREE, 4, 3)
-    board = engine.generate_random_things_on_map(board, BUSH, 2, 2)
+
+    board = engine.generate_random_things_on_map(board, TREE3, 4, 3)
+    board = engine.generate_random_things_on_map(board, TREE4, 4, 3)
+    #board = engine.generate_random_things_on_map(board, BUSH, 2, 2)
     main(player, board)
 
 
@@ -24,35 +29,35 @@ def create_player():
     Returns:
     dictionary
     '''
-    player = {}
-    player["x"] = PLAYER_START_X
-    player["y"] = PLAYER_START_Y
-    player["icon"] = PLAYER_ICON
-    player["height"] = 3
-    player["width"] = 5 # body + 2 arms, emojis are wider than single character
-    player["HP"] = 5
-    player["MP"] = 10
-    player["lvl"] = 1
-    player["experience"] = 0
-    player["max_experience"] = 5    # Exp needed to lvl up
-    player["Inteligence"] = 1   # Stat making spells and potions deal/heal more
-    player["strength"] = 1      # Stat increasing attack dmg
-    player["endurance"] = 1     # Stat increasing max carry and max hp
-    player["charisma"] = 1      # Make it possible to get bonuses from events
-    player["max_hp"] = 10
-    player["max_player_carry"] = 10    # Maximum carrying size
-    player["attack"] = 1   # Dmg Player deal to enemies
+    player = {
+        "x": PLAYER_START_X,
+        "y": PLAYER_START_Y,
+        "icon": PLAYER_ICON,
+        "height": 3,
+        "width": 5, # body + 2 arms, emojis are wider than single character
+        "HP": 5,
+        "MP": 10,
+        "lvl": 1,
+        "experience": 20,
+        "max_experience": 100,    # Exp needed to lvl up
+        "intelligence": 1,   # Stat making spells and potions deal/heal more
+        "strength": 1,      # Stat increasing attack dmg
+        "endurance": 1,     # Stat increasing max carry and max hp
+        "charisma": 1,      # Make it possible to get bonuses from events
+        "max_hp": 10,
+        "max_player_carry": 10,    # Maximum carrying size
+        "attack": 1   # Dmg Player deal to enemies
+    }
     return player
-    
+
 
 def main(player, board):
 
     board_with_player = engine.put_player_on_board(board, player)
 
     clear_screen()
-    ui.display_board(board_with_player)
-    print(player)
-    stats.display_basic_stats(player)
+    ui.display_board(board_with_player, player)
+    print(f"\n\tPLAYER X:{player['x']} Y:{player['y']}")
     
     key = key_pressed()
     # vertical movement
@@ -79,13 +84,28 @@ def main(player, board):
         player["x"] += 1
         player["y"] += 1
     # key binded options
+    elif key in KEY_BINDINGS["overlay"]: # OVERLAY TEST
+        ui.show_overlay(board_with_player)
+        clear_screen()
+        ui.display_board(board_with_player, player)
+        input()
+    
+    elif key in KEY_BINDINGS["customize"]:
+        engine.customize_character(player)
+    elif key in KEY_BINDINGS["logo"]:
+        ui.show_logo_animation(LOGO)
+    elif key in KEY_BINDINGS["story"]:
+        ui.show_story()
+    elif key in KEY_BINDINGS["verbal_attack"]:
+        ui.verbal_attack(board_with_player, player)
+
     elif key in KEY_BINDINGS["inventory"]:
         ui.display_inv()
         print("1.Heal", "2.Regen", "~~~Enter to Exit")
         option = input()
         if option == "1":
             if "HP Potion" in ui.inv:
-                player["HP"] += 1 + player["Inteligence"]
+                player["HP"] += 1 + player["intelligence"]
                 # If current HP >= maxHP currentHP=MaxHP
                 if player["HP"] >= player["max_hp"]:
                     player["HP"] = player["max_hp"]
@@ -95,19 +115,19 @@ def main(player, board):
                 pass
         if option == "2":
             if "Mana Potion" in ui.inv:
-                player["MP"] += 10 + player["Inteligence"]
+                player["MP"] += 10 + player["intelligence"]
                 ui.inv.remove("Mana Potion")
         else:
             print("No potions")
         if option == "3":
             #pass
-            player["experience"] += 7   # Cheat
-            engine.level_up(player)
+            player["experience"] += 60   # Cheat
+            player["HP"] += 5
+            player["max_hp"] += 5
+            stats.level_up(player)
     elif key in KEY_BINDINGS["stats"]:
         stats.display_advenced_stats(player)  # Display stats like attack dmg
         pass
-    elif key in KEY_BINDINGS["customize"]:
-        engine.customize_character(player)
     elif key in KEY_BINDINGS["exit"]:
         return
 
