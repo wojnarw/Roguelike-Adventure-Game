@@ -6,6 +6,8 @@ small_monster_hp = ENEMIES["small"]["HP"]
 small_monster_dmg = ENEMIES["small"]["DMG"]
 large_monster_hp = ENEMIES["big"]["HP"]
 large_monster_dmg = ENEMIES["big"]["DMG"]
+boss_monster_hp = ENEMIES["boss"]["HP"]
+boss_monster_dmg = ENEMIES["boss"]["DMG"]
 
 
 def create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON):
@@ -74,7 +76,7 @@ def level_up(player):
         player_score += 200
 
 
-def small_taking_dmg(player):
+def small_taking_dmg(player):  # Dmg small monster deal to Player
     player["HP"] -= small_monster_dmg
     print("HP -" + str(small_monster_dmg))
     if player["HP"] <= 0:
@@ -82,9 +84,17 @@ def small_taking_dmg(player):
         raise SystemExit
 
 
-def large_taking_dmg(player):
+def large_taking_dmg(player):  # Dmg large monster deal to Player
     player["HP"] -= large_monster_dmg
     print("HP -" + str(large_monster_dmg))
+    if player["HP"] <= 0:
+        print("Przegrana")
+        raise SystemExit
+
+
+def boss_taking_dmg(player):  # Dmg Boss deal to Player
+    player["HP"] -= boss_monster_dmg
+    print("HP -" + str(boss_monster_dmg))
     if player["HP"] <= 0:
         print("Przegrana")
         raise SystemExit

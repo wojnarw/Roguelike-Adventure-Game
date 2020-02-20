@@ -7,7 +7,8 @@ from const import *
 from maps import *
 from helpers import key_pressed, clear_screen
 
-def create_board(width, height, maps = ""):
+
+def create_board(width, height, maps=""):
     '''
     Creates game board based on input parameters.
 
@@ -25,8 +26,8 @@ def create_board(width, height, maps = ""):
             for e in range(width):
                 board[line].append("")
         return board
-    
-    chosen_map = MAPS[random.randint(0,len(MAPS)-1)]
+
+    chosen_map = MAPS[random.randint(0, len(MAPS)-1)]
     chosen_map = chosen_map.split("\n")
     if len(chosen_map) < height:
         for y in range(height - len(chosen_map)):
@@ -36,10 +37,10 @@ def create_board(width, height, maps = ""):
         board.append([])
         for e in range(width):
             if len(chosen_map[line]) < width:
-                board[line].append(chosen_map[line][e] * (width - len(chosen_map[line])))
+                board[line].append(chosen_map[line][e] *
+                                   (width - len(chosen_map[line])))
             board[line].append(chosen_map[line][e])
     return board
-
 
     """try:
         with open(filename,"r") as file:
@@ -66,8 +67,8 @@ def put_player_on_board(original_board, player):
     '''
     y = player["y"]
     x = player["x"]
-    #player["height"]
-    #player["width"]
+    # player["height"]
+    # player["width"]
 
     board = copy.deepcopy(original_board)
 
@@ -100,9 +101,9 @@ def put_player_on_board(original_board, player):
 
     return board
 
-    
+
 def customize_character(player, new_head="", new_body="", new_legs=""):
-    
+
     player = change_body_part(player, "head")
     player = change_body_part(player, "body")
     player = change_body_part(player, "legs")
@@ -129,14 +130,13 @@ def change_body_part(player, new_body_part_type, id=0):
         print(f"\tHEAD:   {PLAYER_ICON['head']}  ")
         print(f"\tBODY:   {PLAYER_ICON['body']}  ")
         print(f"\t{new_body_part_type.upper()}: ◄ {part_type[id]} ►")
-    
 
     key = key_pressed()
     if key in KEY_BINDINGS["left"] and id > 0:
         change_body_part(player, new_body_part_type, id-1)
     elif key in KEY_BINDINGS["right"] and id < len(part_type)-1:
         change_body_part(player, new_body_part_type, id+1)
-    elif key == 10: # test ENTERa
+    elif key == 10:  # test ENTERa
         input()
         pass
     elif key in KEY_BINDINGS["exit"]:
@@ -160,14 +160,13 @@ def draw_walls_and_background(board, WALL, BACKGROUND):
     return board
 
 
-def generate_random_things_on_map(board, item, max_items_in_row = 4, max_items_in_column = 2):
-
+def generate_random_things_on_map(board, item, max_items_in_row=4, max_items_in_column=2):
 
     board_width = len(board[0])
     board_height = len(board)
 
     if isinstance(item, list):
-        
+
         item_height = len(item)
         item_width = len(max(item))
         for i in range(item_height):
@@ -175,23 +174,26 @@ def generate_random_things_on_map(board, item, max_items_in_row = 4, max_items_i
                 difference = item_width - len(item[i])
                 item[i] = item[i] + (" " * difference)
 
-        itemsY = random.sample(range(1,board_height - item_height), max_items_in_column)
+        itemsY = random.sample(
+            range(1, board_height - item_height), max_items_in_column)
         itemsY = sorted(itemsY)
-        itemsX = random.sample(range(1,board_width - (item_width * max_items_in_row)), max_items_in_row)
+        itemsX = random.sample(
+            range(1, board_width - (item_width * max_items_in_row)), max_items_in_row)
 
         #print(itemsX, itemsY)
-        #input()
+        # input()
         for i in range(0, min([len(itemsX), len(itemsY)])):
             for h in range(item_height):
                 for w in range(item_width):
                     if item[h][w] != " ":
-                        board[itemsY[i]+h][itemsX[i]+w] =  item[h][w]
-                
+                        board[itemsY[i]+h][itemsX[i]+w] = item[h][w]
+
     elif isinstance(item, str):
         item_width = len(item)
-    
+
         for i in range(1, len(board)-1):
-            itemsX = random.sample(range(1,board_width - item_width), max_items_in_row)
+            itemsX = random.sample(
+                range(1, board_width - item_width), max_items_in_row)
             for e in range(max_items_in_row):
                 board[i][itemsX[e]] = item
 
@@ -222,183 +224,7 @@ def small_monster_kill(player):
     player["experience"] += 20
 
 
-def large_monster_kill(player):
+def boss_monster_kill(player):
     stats.monsters_kill += 1
-    stats.player_score += 25
-    player["experience"] += 50
-
-
-def fight_with_monsters_small(player):
-    while stats.small_monster_hp > 0:
-        print("Player Hp :  " + str(player["HP"]) + "/" + str(player["max_hp"]))
-        print("Choose option: " "\n" "1.Attack" "\n" "2. Inventory" "\n"
-              "3.Try to escape")
-        key = key_pressed()
-        clear_screen()
-        if key in KEY_BINDINGS_FIGHT["Fight"]:
-            print("1. Attack with weapon =", player["attack"], "dmg", "\n"
-                "2. Cast Fire ball =", 1 + player["intelligence"], "dmg", "\n"
-                "3. Back"
-                )
-            key = key_pressed()
-            clear_screen()
-            if key == "1":
-                chance_to_hit = ["hit", "hit", "hit", "miss"]
-                if random.choice(chance_to_hit) == "hit":
-                    print("Succeeded!")
-                    stats.small_monster_hp -= player["attack"]      # Add monster hp
-                    if stats.small_monster_hp <= 0:
-                        print("You killed monster")
-                        small_monster_kill(player)
-                        continue
-                    else:
-                        stats.small_taking_dmg(player)
-                        fight_with_monsters_small(player)
-                    input("Press enter")
-                    clear_screen()
-                else:
-                    print("Missed")
-                    stats.small_taking_dmg(player)
-                    input("Press enter")
-            elif key == "2":
-                chance_to_hit = ["hit", "hit", "hit", "miss"]
-                if random.choice(chance_to_hit) == "hit":
-                    print("Succeeded!")
-                    stats.small_monster_hp -= 1 + player["intelligence"]
-                    if stats.small_monster_hp <= 0:
-                        print("You killed monster")
-                        small_monster_kill(player)
-                        pass
-                    else:
-                        stats.small_taking_dmg(player)
-                        fight_with_monsters_small(player)
-                    input("Press enter")
-                else:
-                    print("Missed")
-                    stats.small_taking_dmg(player)
-                    input("Press enter")
-            elif key == "3":
-                fight_with_monsters_small(player)
-        elif key in KEY_BINDINGS_FIGHT["Use inventory"]:
-            ui.display_inv()
-            print("1.Heal", "2.Regen", "3.Back")
-            key = key_pressed()
-            if key == "1":
-                if "HP Potion" in ui.inv:
-                    player["HP"] += 1 + player["intelligence"]
-                    # If current HP >= maxHP currentHP=MaxHP
-                    if player["HP"] >= player["max_hp"]:
-                        player["HP"] = player["max_hp"]
-                    ui.inv.remove("HP Potion")
-                else:
-                    print("No potions")
-                    pass                                           # Sprawdź
-            if key == "2":
-                if "Mana Potion" in ui.inv:
-                    player["MP"] += 10 + player["intelligence"]
-                    ui.inv.remove("Mana Potion")
-                else:
-                    print("No potions")
-            fight_with_monsters_small(player)
-            if key == "3":
-                fight_with_monsters_small(player)
-        elif key in KEY_BINDINGS_FIGHT["Try to escape"]:
-            chance_to_escape = ["fail", "fail", "fail", "fail", "fail", "fail",
-                                "successed"]
-            if random.choice(chance_to_escape) == "successed":
-                print("You escaped")
-                input("Press enter")
-            elif random.choice(chance_to_escape) == "fail":
-                print("Failed")
-                stats.small_taking_dmg(player)
-                fight_with_monsters_small(player)
-        if key not in KEY_BINDINGS_FIGHT:
-            fight_with_monsters_small(player)
-
-
-def fight_with_monsters_large(player):
-    while stats.large_monster_hp > 0:
-        print("Player Hp :  " + str(player["HP"]) + "/" + str(player["max_hp"]))
-        print("Choose option: " "\n" "1.Attack" "\n" "2. Inventory" "\n"
-              "3.Try to escape")
-        key = key_pressed()
-        clear_screen()
-        if key in KEY_BINDINGS_FIGHT["Fight"]:
-            print("1. Attack with weapon =", player["attack"], "dmg", "\n"
-                "2. Cast Fire ball =", 1 + player["intelligence"], "dmg", "\n"
-                "3. Back"
-                )
-            key = key_pressed()
-            clear_screen()
-            if key == "1":
-                chance_to_hit = ["hit", "hit", "hit", "miss"]
-                if random.choice(chance_to_hit) == "hit":
-                    print("Succeeded!")
-                    stats.large_monster_hp -= player["attack"]      # Add monster hp
-                    if stats.large_monster_hp <= 0:
-                        print("You killed monster")
-                        large_monster_kill(player)
-                        continue
-                    else:
-                        stats.large_taking_dmg(player)
-                        fight_with_monsters_large(player)
-                    input("Press enter")
-                    clear_screen()
-                else:
-                    print("Missed")
-                    stats.large_taking_dmg(player)
-                    input("Press enter")
-            elif key == "2":
-                chance_to_hit = ["hit", "hit", "hit", "miss"]
-                if random.choice(chance_to_hit) == "hit":
-                    print("Succeeded!")
-                    stats.large_monster_hp -= 1 + player["intelligence"]
-                    if stats.large_monster_hp <= 0:
-                        print("You killed monster")
-                        large_monster_kill(player)
-                        pass
-                    else:
-                        stats.large_taking_dmg(player)
-                        fight_with_monsters_large(player)
-                    input("Press enter")
-                else:
-                    print("Missed")
-                    stats.large_taking_dmg(player)
-                    input("Press enter")
-            elif key == "3":
-                fight_with_monsters_large(player)
-        elif key in KEY_BINDINGS_FIGHT["Use inventory"]:
-            ui.display_inv()
-            print("1.Heal", "2.Regen", "3.Back")
-            key = key_pressed()
-            if key == "1":
-                if "HP Potion" in ui.inv:
-                    player["HP"] += 1 + player["intelligence"]
-                    # If current HP >= maxHP currentHP=MaxHP
-                    if player["HP"] >= player["max_hp"]:
-                        player["HP"] = player["max_hp"]
-                    ui.inv.remove("HP Potion")
-                else:
-                    print("No potions")
-                    pass                                           # Sprawdź
-            if key == "2":
-                if "Mana Potion" in ui.inv:
-                    player["MP"] += 10 + player["intelligence"]
-                    ui.inv.remove("Mana Potion")
-                else:
-                    print("No potions")
-            fight_with_monsters_large(player)
-            if key == "3":
-                fight_with_monsters_large(player)
-        elif key in KEY_BINDINGS_FIGHT["Try to escape"]:
-            chance_to_escape = ["fail", "fail", "fail", "fail", "fail", "fail",
-                                "successed"]
-            if random.choice(chance_to_escape) == "successed":
-                print("You escaped")
-                input("Press enter")
-            elif random.choice(chance_to_escape) == "fail":
-                print("Failed")
-                stats.large_taking_dmg(player)
-                fight_with_monsters_large(player)
-        if key not in KEY_BINDINGS_FIGHT:
-            fight_with_monsters_large(player)
+    stats.player_score += 250
+    

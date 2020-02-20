@@ -49,6 +49,11 @@ ENEMIES = {"small": {"icon": "@",
                     "HP": 20,
                     "DMG": 3,
                     "speed": 1
+                    },
+            "boss": {"icon": "0",
+                     "HP": 50,
+                     "DMG": 5,
+                     "speed": 1
                     }
         }
 
