@@ -28,15 +28,16 @@ def key_pressed():
         return ch
 
 
-def clear_screen(n =500):
+def clear_screen(n = 0):
     
     #if os.name == "nt":
     #    os.system('cls')
     #else:
     #    os.system('clear')
     
-    os.system('clear')
-    #if n == 0:
-    #    os.system('clear')
-    #else:
-    #    print('\b'*n)
+    if n == 0:
+        os.system('clear')
+    else:
+        os.system('clear')
+        #print('\033[1A'*n)
+        #print('\b'*n)

@@ -85,20 +85,6 @@ def put_player_on_board(original_board, player):
     board[y+1][x] = player["icon"]["legs"]
     board[y+1][x+1] = ""
 
-    # old version with X and Y of player in its right top corner
-    """board[y][x-3] = player["icon"]["head"]
-    board[y][x-2] = ""
-
-    board[y+1][x-4] = player["icon"]["leftHand"]
-    board[y+1][x-3] = player["icon"]["body"]
-    board[y+1][x-2] = player["icon"]["rightHand"]
-    board[y+1][x-1] = ""
-    board[y+1][x] = ""
-
-    board[y+2][x-3] = player["icon"]["legs"]
-    board[y+2][x-2] = ""
-    """
-
     return board
 
 
@@ -132,9 +118,9 @@ def change_body_part(player, new_body_part_type, id=0):
         print(f"\t{new_body_part_type.upper()}: ◄ {part_type[id]} ►")
 
     key = key_pressed()
-    if key in KEY_BINDINGS["left"] and id > 0:
+    if key in KEY_BINDINGS_MOVE["left"] and id > 0:
         change_body_part(player, new_body_part_type, id-1)
-    elif key in KEY_BINDINGS["right"] and id < len(part_type)-1:
+    elif key in KEY_BINDINGS_MOVE["right"] and id < len(part_type)-1:
         change_body_part(player, new_body_part_type, id+1)
     elif key == 10:  # test ENTERa
         input()
@@ -160,13 +146,16 @@ def draw_walls_and_background(board, WALL, BACKGROUND):
     return board
 
 
-def generate_random_things_on_map(board, item, max_items_in_row=4, max_items_in_column=2):
+def generate_random_things_on_map(board, item, max_items_in_row = 4, max_items = 100):
 
     board_width = len(board[0])
     board_height = len(board)
 
-    if isinstance(item, list):
-
+    # 2D items, like trees
+    #if isinstance(item, list):
+    if len(item) > 1:
+        
+        item = item.split("\n")
         item_height = len(item)
         item_width = len(max(item))
         for i in range(item_height):
@@ -175,28 +164,36 @@ def generate_random_things_on_map(board, item, max_items_in_row=4, max_items_in_
                 item[i] = item[i] + (" " * difference)
 
         itemsY = random.sample(
-            range(1, board_height - item_height), max_items_in_column)
+            range(1, board_height - item_height), max_items_in_row)
         itemsY = sorted(itemsY)
         itemsX = random.sample(
             range(1, board_width - (item_width * max_items_in_row)), max_items_in_row)
 
-        #print(itemsX, itemsY)
-        # input()
         for i in range(0, min([len(itemsX), len(itemsY)])):
+            # do not print on spawn point
+            if itemsX[i] in range(SPAWN_POINT["x1"], SPAWN_POINT["x2"]) and itemsY[i] in range(SPAWN_POINT["y1"], SPAWN_POINT["y2"]):
+                continue
+
             for h in range(item_height):
                 for w in range(item_width):
                     if item[h][w] != " ":
                         board[itemsY[i]+h][itemsX[i]+w] = item[h][w]
 
-    elif isinstance(item, str):
+    #elif isinstance(item, str):
+    elif len(item) == 1:
         item_width = len(item)
 
         for i in range(1, len(board)-1):
             itemsX = random.sample(
                 range(1, board_width - item_width), max_items_in_row)
             for e in range(max_items_in_row):
-                board[i][itemsX[e]] = item
+                # do not print on spawn point
+                if e in range(SPAWN_POINT["y1"], SPAWN_POINT["y2"]) and itemsX[e] in range(SPAWN_POINT["x1"], SPAWN_POINT["x2"]):
+                    continue
 
+                if board[i][itemsX[e]] == " " or board[i][itemsX[e]] == GRASS:
+                    board[i][itemsX[e]] = item
+                
     return board
 
 
@@ -216,3 +213,20 @@ def max_player_weight_reached():    # Everytime player tries to store something
     if stats.max_player_carry > ui.inv_weight:
         print("You can't carry this item")
         ui.inv.pop[-1]
+
+
+def generate_new_map(board, player):
+    board = draw_walls_and_background(board, WALL, BACKGROUND)
+    board = generate_random_things_on_map(board, GRASS, 20, 5)
+    board = generate_random_things_on_map(board, CEMENTERY, 1)
+    board = generate_random_things_on_map(board, TREES[0], 3)
+    board = generate_random_things_on_map(board, TREES[1], 2)
+    board = generate_random_things_on_map(board, TREES[2], 3)
+    board = generate_random_things_on_map(board, ENEMIES["small"]["icon"], 1)
+    board = generate_random_things_on_map(board, ENEMIES["big"]["icon"], 1)
+
+    player["x"] = PLAYER_START_X
+    player["y"] = PLAYER_START_Y
+    board = put_player_on_board(board, player)
+
+    return board

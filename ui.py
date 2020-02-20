@@ -3,6 +3,7 @@ import shutil
 import math
 import random
 import const
+import asciiart
 from helpers import clear_screen
 from termcolor import colored
 
@@ -49,6 +50,7 @@ def display_board(board, player):
     lines[6] += " P - show story"
     lines[7] += " O - show test overlay"
     lines[8] += " V - verbal attack"
+    lines[9] += " G - generate new level"
     
 
     # display HP points properly, if there are more than 10 (max in a row)
@@ -106,7 +108,6 @@ def display_board(board, player):
 inv = {"HP Potion", "Mana Potion", "Beginner Sword"}
 inv_weight = 0
 
-
 def display_inv():
     print(inv)
 
@@ -122,7 +123,7 @@ def show_hall_of_fame():
         input("Press enter")
         
 
-def show_overlay(board, table=["sword","ring","lala"]):
+def show_overlay(board, table=["sword","ring","lala"], show_indexes = True):
 
     BOARD_WIDTH = len(board[0])
     BOARD_HEIGHT = len(board)
@@ -142,10 +143,12 @@ def show_overlay(board, table=["sword","ring","lala"]):
             else:
                 board[y][x] = " "
     margin = 2
+
     for i in range(len(table)):
-        board[overlay_y + i + margin][overlay_x + 0 + margin] = str(i+1)
-        board[overlay_y + i + margin][overlay_x + 1 + margin] = "."
-        board[overlay_y + i + margin][overlay_x + 2 + margin] = " "
+        if show_indexes:
+            board[overlay_y + i + margin][overlay_x + 0 + margin] = str(i+1)
+            board[overlay_y + i + margin][overlay_x + 1 + margin] = "."
+            board[overlay_y + i + margin][overlay_x + 2 + margin] = " "
         
         for e in range (margin, len(table[i]) + margin):
             board[overlay_y + i + margin][overlay_x + e + margin] = table[i][e-margin]
@@ -180,7 +183,7 @@ def show_story():
         print(empty_space)
         for e in range(len(text)):
             print(text[e].center(shutil.get_terminal_size().columns))
-        print(FACE2[i % 2])
+        print(asciiart.FACE2[i % 2])
         time.sleep(animation_delay)
         
     input()
@@ -188,12 +191,13 @@ def show_story():
 
 def verbal_attack(board_with_player, player, used):
 
-    texts = ["Tylko Bóg może mnie sądzić",
-             "Nie sąd cię skaże wiedźmi sługo",
+    texts = ["Nie sąd cię skaże wiedźmi sługo",
              "Widziałem cię w Żabce na kasie",
              "Pchasz się w gips, kolego",
              "Masz niedobór żelaza pod żebrami?",
-             "HA TFU!"
+             "HA TFU!",
+             "Czarci pomiot!",
+             "Chrrrr HA TFU!"
              ]
     # make random not repeat last choice
     choose = random.randint(0, len(texts)-1)
@@ -208,12 +212,18 @@ def verbal_attack(board_with_player, player, used):
 
 def player_say(board_with_player, player, sentence):
 
+    # bubble speech relative position
+    speech_Y = player["y"] - 2
+    if len(sentence) + player["x"] < len(board_with_player[0]):
+        speech_X = player["x"] + 3
+    else:
+        speech_X = player["x"] - len(sentence)
+
     for i in range(len(sentence)):
-        board_with_player[player["y"]-1][player["x"] + i + 2] = sentence[i]
+        board_with_player[speech_Y][speech_X + i] = sentence[i]
 
     clear_screen()
     display_board(board_with_player, player)
-
 
 def show_logo_animation(logo):
 
@@ -278,141 +288,4 @@ def fade_in(string_to_fade, color, animation_delay, characters):
         string_to_fade = string_to_fade.replace(characters[i], characters[i+1])
         print(colored(string_to_fade, color, attrs=[]))
         time.sleep(animation_delay)
-"""
-
-
-
-# FACES ASCII ART: https://asciiart.website//index.php?art=people/faces
-
-BABA_YAGA_FROM_REACTOR = """
-            _...._
-        _.dMMMMMMMMMb.
-    ..dMMMMMMMMMMMMMMMb
-  .dMMMMMMMMMMMMMMMMMMMMb.
- dMMMMMMMMMMMMMMMMMMMMMMMM.
- MMMMMMMP'`YMMMMMMMMMMMMMMMb
- MMMMMMP    MMMMMMMMMMMMMMMM
-dMMMMMP     `MMMMMMMMMMMMMMMb
-MMMMMM~=,,_  `MMMMMMMMMMMMMMM
-MMMMMMP,6;    `MMMMMMMMMMMMMMb
-MMMMMM|         ```^YMMMMMMMMM
-MMMMMM:   -~        / |MMMMMMMb
-`MMMMM/\  _.._     /  |MMMMMMMM
-  `YMM\_`.`~--'    \__/MMMMMMMM!
-    MMMMMM\       _.' _sS}MMMMMb
-    `YMMMMMb.__.sP.---.  MMMMMMM
-      ``YMMMMMMMP'        \MMMMMb
-          ``MMMd;          MMMMMM
-              dP|          :MMMMMb.
-          _.sP'             :MMMMMM
-      _.s888P'   ,  .-. .-. |MMMMM}
-   .s888888P    ,_|(  fsc  )|MMMM
- .d88888888;     `\ `-._.-' ;;M'
- 8888888888|       :         :;,
- 8888888888;       |         |`;,_
- `Y88888888b     _,:         |/Y\;
-    `^Y88888ssssSP~":        ;SsP/
-        ''''\\        |         ;
-            ;       |         |
-            ;       ;         |
-           /      .'          |
-         .'    .-'            ;
-        /_...-'             .'\\
-       .'              _..-'   :
-      /         __.--""         :
-"""
-
-FACE = """
-                  _____    ____
-               .#########.#######..
-            .#######################.
-          .############################.
-         .################################.
-        .#########,##,#####################.
-       .#########-#,'########## ############.
-      .######'#-##' # ##'### #. `####:#######.
-      #####:'# #'###,##' # # +#. `###:':######
-     .####,'###,##  ###  # # #`#. -####`######.
-    .####+.' ,'#  ##' #   # # #`#`.`#####::####
-    ####'    #  '##'  #   #_'# #.## `#######;##
-    #:##'      '       #   # ``..__# `#######:#
-    #:##'  .#######s.   #.  .s######.\`#####:##
-    #:##   ."______""'    '""_____"". `.#####:#
-   .#:##   ><'(##)'> )    ( <'(##)`><   `####;#
-   ##:##  , , -==-' '.    .` `-==- . \  ######'
-   #|-'| / /      ,  :    : ,       \ ` :####:'
-   :#  |: '  '   /  .     .  .  `    `  |`####
-   #|  :|   /   '  '       `  \   . ,   :  #:#
-   #L. | | ,  /   `.-._ _.-.'   .  \ \  : ) J##
-  ###\ `  /  '                   \  : : |  /##
-   ## #|.:: '       _    _        ` | | |'####
-   #####|\  |  (.-'.__`-'__.`-.)   :| ' ######
-   ######\:      `-...___..-' '     :: /######
-   #######\``.                   ,'|  /#######
-  .# ######\  \       ___       / /' /#######
-  # #'#####|\  \    -     -    /  ,'|### #. #.
-  `#  #####| '-.`             ' ,-'  |### #  #
-      #' `#|    '._         ,.-'     #`#`#.
-           |       .'------' :       |#   #
-           |       :         :       |
-           |       :         :       |
-                   :         :          """
-
-FACE2 = []
-FACE2.append("""
-\t        .-'--.
-\t      .'      '.
-\t     /     _    `-.
-\t    /      .\-     \,  ,
-\t   ;       .-|-'    \####,
-\t   |,       .-|-'    ;####
-\t  ,##         `     ,|###"
-\t#,####, "#,        ,#|^;#
-\t`######  `#####,|##" |`)|
-\t `#####    ```o\`\o_.| ;\\
-\t  (-`\#,    .-'` |`  : `;
-\t  `\ ;\#,         \   \-'    _______________________________
-\t    )( \#    C,_   \   ;   ,'                               `.
-\t    (_,  \  /   `'./   |  (    Ta wiedźma zajebała Ryśka      )
-\t      \  / | .-`'--'`. |   ` .  ___________________________,'
-\t       | ( \   ,  /_,  |     |/
-\t       \    `   ``     /   _,'
-\t        '-.__     // .'
-\t             `'`.__.'
-
-\t            Marysia
-""")
-FACE2.append("""
-\t        .-'--.
-\t      .'      '.
-\t     /     _    `-.
-\t    /      .\-     \,  ,
-\t   ;       .-|-'    \####,
-\t   |,       .-|-'    ;####
-\t  ,##         `     ,|###"
-\t#,####, "#,        ,#|^;#
-\t`######  `#####,|##" |`)|
-\t `#####    ```o\`\o_.| ;\\
-\t  (-`\#,    .-'` |`  : `;
-\t  `\ ;\#,         \   \-'    _______________________________
-\t    )( \#    C,_   \   ;   ,'                               `.
-\t    (_,  \  /   `'./   |  (    Ta wiedźma zajebała Ryśka      )
-\t      \  / |           |   ` .  ___________________________,'
-\t       | ( \ .-`'--'`. |     |/
-\t       \    ` ''``''   /   _,'
-\t        '-.__     // .'
-\t             `'`.__.'
-
-\t            Marysia
-""")
-FACE3 = """
-                        _______________________________
-    /'''''''''''\      ,'                               `.
- _ / ____   ____ \ _  (                                   )
-| \=( (@ )=( (@ )=/ |  `.  _____________________________,'
-\_( ,`--'(_)`--'. )_/    |/
- ( /______I______\ )   _,'
-  \\\_|_|_|_|_|_///
-   \ `|_|_|_|_|' /
-    `---.___,---'
 """

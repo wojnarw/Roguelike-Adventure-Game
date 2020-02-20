@@ -2,9 +2,26 @@ import stats
 import main
 import engine
 import random
+import ui
 from helpers import key_pressed, clear_screen
 from const import *
 
+def small_monster_kill(player):
+    stats.monsters_kill += 1
+    stats.player_score += 10
+    player["experience"] += 20
+    return True
+    
+def large_monster_kill(player):
+    stats.monsters_kill += 1
+    stats.player_score += 10
+    player["experience"] += 20
+    return True
+
+def boss_monster_kill(player):
+    stats.monsters_kill += 1
+    stats.player_score += 250
+    
 
 def fight_with_monsters_small(player):
     while stats.small_monster_hp > 0:
@@ -33,16 +50,19 @@ def fight_with_monsters_small(player):
                     if stats.small_monster_hp <= 0:
                         print("You killed monster")
                         small_monster_kill(player)
-                        continue
+                        return True
                     else:
                         stats.small_taking_dmg(player)
                         fight_with_monsters_small(player)
-                    input("Press enter")
+                    print("Press enter")
+                    key_pressed()
                     clear_screen()
+                    return True
                 else:
                     print("Missed")
                     stats.small_taking_dmg(player)
-                    input("Press enter")
+                    print("Press enter")
+                    key_pressed()
             elif key == "2":
                 if player["MP"] >= 5:
                     player["MP"] -= 5
@@ -53,15 +73,17 @@ def fight_with_monsters_small(player):
                         if stats.small_monster_hp <= 0:
                             print("You killed monster")
                             small_monster_kill(player)
-                            pass
+                            return True
                         else:
                             stats.small_taking_dmg(player)
                             fight_with_monsters_small(player)
-                        input("Press enter")
+                        print("Press enter")
+                        key_pressed()
                     else:
                         print("Missed")
                         stats.small_taking_dmg(player)
-                        input("Press enter")
+                        print("Press enter")
+                        key_pressed()
                 else:
                     print("Not enough mana")
                     fight_with_monsters_small(player)
@@ -80,7 +102,7 @@ def fight_with_monsters_small(player):
                     ui.inv.remove("HP Potion")
                 else:
                     print("No potions")
-                    pass                                           # Sprawdź
+                    return True                                           # Sprawdź
             if key == "2":
                 if "Mana Potion" in ui.inv:
                     player["MP"] += 10 + player["intelligence"]
@@ -96,7 +118,8 @@ def fight_with_monsters_small(player):
             if random.choice(chance_to_escape) == "successed":
                 print("You escaped")
                 stats.small_monster_hp = 0
-                input("Press enter")
+                print("Press enter")
+                key_pressed()
             elif random.choice(chance_to_escape) == "fail":
                 print("Failed")
                 stats.small_taking_dmg(player)
@@ -136,12 +159,14 @@ def fight_with_monsters_large(player):
                     else:
                         stats.large_taking_dmg(player)
                         fight_with_monsters_large(player)
-                    input("Press enter")
+                    print("Press enter")
+                    key_pressed()
                     clear_screen()
                 else:
                     print("Missed")
                     stats.large_taking_dmg(player)
-                    input("Press enter")
+                    print("Press enter")
+                    key_pressed()
             elif key == "2":
                 if player["MP"] >= 5:
                     player["MP"] -= 5
@@ -152,15 +177,17 @@ def fight_with_monsters_large(player):
                         if stats.large_monster_hp <= 0:
                             print("You killed monster")
                             large_monster_kill(player)
-                            pass
+                            return True
                         else:
                             stats.large_taking_dmg(player)
                             fight_with_monsters_large(player)
-                        input("Press enter")
+                        print("Press enter")
+                        key_pressed()
                     else:
                         print("Missed")
                         stats.large_taking_dmg(player)
-                        input("Press enter")
+                        print("Press enter")
+                        key_pressed()
                 else:
                     print("Not enough mana")
                     fight_with_monsters_large(player)
@@ -195,7 +222,8 @@ def fight_with_monsters_large(player):
             if random.choice(chance_to_escape) == "successed":
                 print("You escaped")
                 stats.large_monster_hp = 0
-                input("Press enter")
+                print("Press enter")
+                key_pressed()
             elif random.choice(chance_to_escape) == "fail":
                 print("Failed")
                 stats.large_taking_dmg(player)
@@ -235,12 +263,14 @@ def fight_with_monsters_boss(player):
                     else:
                         stats.boss_taking_dmg(player)
                         fight_with_monsters_boss(player)
-                    input("Press enter")
+                    print("Press enter")
+                    key_pressed()
                     clear_screen()
                 else:
                     print("Missed")
                     stats.boss_taking_dmg(player)
-                    input("Press enter")
+                    print("Press enter")
+                    key_pressed()
             elif key == "2":
                 if player["MP"] >= 5:
                     player["MP"] -= 5
@@ -251,15 +281,17 @@ def fight_with_monsters_boss(player):
                         if stats.boss_monster_hp <= 0:
                             print("You killed monster")
                             boss_monster_kill(player)
-                            pass
+                            return True
                         else:
                             stats.boss_taking_dmg(player)
                             fight_with_monsters_boss(player)
-                        input("Press enter")
+                        print("Press enter")
+                        key_pressed()
                     else:
                         print("Missed")
                         stats.boss_taking_dmg(player)
-                        input("Press enter")
+                        print("Press enter")
+                        key_pressed()
                 else:
                     print("Not enough mana")
                     fight_with_monsters_boss(player)
@@ -293,7 +325,8 @@ def fight_with_monsters_boss(player):
                                 "fail"]
             if random.choice(chance_to_escape) == "successed":
                 print("You escaped")
-                input("Press enter")
+                print("Press enter")
+                key_pressed()
                 return
             elif random.choice(chance_to_escape) == "fail":
                 print("Failed")

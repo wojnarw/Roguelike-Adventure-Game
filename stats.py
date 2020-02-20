@@ -1,5 +1,6 @@
 import main
 from const import *
+from helpers import clear_screen
 player_score = 0
 monsters_kill = 0
 small_monster_hp = ENEMIES["small"]["HP"]
@@ -24,7 +25,7 @@ def create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON):
         "icon": PLAYER_ICON,
         "height": 3,
         "width": 5,  # body + 2 arms, emojis are wider than single character
-        "HP": 5,
+        "HP": 9,
         "MP": 10,
         "lvl": 1,
         "experience": 20,
@@ -35,7 +36,7 @@ def create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON):
         "charisma": 1,      # Make it possible to get bonuses from events
         "max_hp": 10,
         "max_player_carry": 10,    # Maximum carrying size
-        "attack": 1   # Dmg Player deal to enemies
+        "attack": 5   # Dmg Player deal to enemies
     }
     return player
 
@@ -80,7 +81,9 @@ def small_taking_dmg(player):  # Dmg small monster deal to Player
     player["HP"] -= small_monster_dmg
     print("Player took dmg -" + str(small_monster_dmg) + "HP")
     if player["HP"] <= 0:
+        clear_screen()
         print("Przegrana")
+        input()
         raise SystemExit
 
 
@@ -88,7 +91,9 @@ def large_taking_dmg(player):  # Dmg large monster deal to Player
     player["HP"] -= large_monster_dmg
     print("Player took dmg -" + str(large_monster_dmg) + "HP")
     if player["HP"] <= 0:
+        clear_screen()
         print("Przegrana")
+        input()
         raise SystemExit
 
 
