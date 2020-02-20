@@ -216,15 +216,3 @@ def max_player_weight_reached():    # Everytime player tries to store something
     if stats.max_player_carry > ui.inv_weight:
         print("You can't carry this item")
         ui.inv.pop[-1]
-
-
-def small_monster_kill(player):
-    stats.monsters_kill += 1
-    stats.player_score += 10
-    player["experience"] += 20
-
-
-def boss_monster_kill(player):
-    stats.monsters_kill += 1
-    stats.player_score += 250
-    

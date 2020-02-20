@@ -78,7 +78,7 @@ def level_up(player):
 
 def small_taking_dmg(player):  # Dmg small monster deal to Player
     player["HP"] -= small_monster_dmg
-    print("HP -" + str(small_monster_dmg))
+    print("Player took dmg -" + str(small_monster_dmg) + "HP")
     if player["HP"] <= 0:
         print("Przegrana")
         raise SystemExit
@@ -86,7 +86,7 @@ def small_taking_dmg(player):  # Dmg small monster deal to Player
 
 def large_taking_dmg(player):  # Dmg large monster deal to Player
     player["HP"] -= large_monster_dmg
-    print("HP -" + str(large_monster_dmg))
+    print("Player took dmg -" + str(large_monster_dmg) + "HP")
     if player["HP"] <= 0:
         print("Przegrana")
         raise SystemExit
@@ -94,7 +94,7 @@ def large_taking_dmg(player):  # Dmg large monster deal to Player
 
 def boss_taking_dmg(player):  # Dmg Boss deal to Player
     player["HP"] -= boss_monster_dmg
-    print("HP -" + str(boss_monster_dmg))
+    print("Player took dmg -" + str(boss_monster_dmg) + "HP")
     if player["HP"] <= 0:
         print("Przegrana")
         raise SystemExit

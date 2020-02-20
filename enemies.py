@@ -8,6 +8,7 @@ from const import *
 
 def fight_with_monsters_small(player):
     while stats.small_monster_hp > 0:
+        print("Monster HP: " + str(stats.small_monster_hp))
         print("Player Hp :  " +
               str(player["HP"]) + "/" + str(player["max_hp"]))
         print("Choose option: " "\n" "1.Attack" "\n" "2. Inventory" "\n"
@@ -99,6 +100,7 @@ def fight_with_monsters_small(player):
 
 def fight_with_monsters_large(player):
     while stats.large_monster_hp > 0:
+        print("Monster HP: " + str(stats.large_monster_hp))
         print("Player Hp :  " +
               str(player["HP"]) + "/" + str(player["max_hp"]))
         print("Choose option: " "\n" "1.Attack" "\n" "2. Inventory" "\n"
@@ -190,6 +192,8 @@ def fight_with_monsters_large(player):
 
 def fight_with_monsters_boss(player):
     while stats.boss_monster_hp > 0:
+        print("Monster HP: " + str(stats.boss_monster_hp))
+        print(stats.boss_monster_hp)
         print("Player Hp :  " +
               str(player["HP"]) + "/" + str(player["max_hp"]))
         print("Choose option: " "\n" "1.Attack" "\n" "2. Inventory" "\n"
@@ -212,7 +216,7 @@ def fight_with_monsters_boss(player):
                     stats.boss_monster_hp -= player["attack"]
                     if stats.boss_monster_hp <= 0:
                         print("You killed monster")
-                        engine.boss_monster_kill(player)
+                        boss_monster_kill(player)
                         continue
                     else:
                         stats.boss_taking_dmg(player)
@@ -230,7 +234,7 @@ def fight_with_monsters_boss(player):
                     stats.boss_monster_hp -= 1 + player["intelligence"]
                     if stats.boss_monster_hp <= 0:
                         print("You killed monster")
-                        engine.boss_monster_kill(player)
+                        boss_monster_kill(player)
                         pass
                     else:
                         stats.boss_taking_dmg(player)
@@ -278,3 +282,20 @@ def fight_with_monsters_boss(player):
                 fight_with_monsters_boss(player)
         if key not in KEY_BINDINGS_FIGHT:
             fight_with_monsters_boss(player)
+
+
+def small_monster_kill(player):
+    stats.monsters_kill += 1
+    stats.player_score += 10
+    player["experience"] += 20
+
+
+def large_monster_kill(player):
+    stats.monsters_kill += 1
+    stats.player_score += 30
+    player["experience"] += 50
+
+
+def boss_monster_kill(player):
+    stats.monsters_kill += 1
+    stats.player_score += 250
