@@ -23,6 +23,10 @@ KEY_BINDINGS = {"left": ("a", "4"),
                 "story": ("p"),
                 "verbal_attack": ("v")
                 }
+KEY_BINDINGS_FIGHT = {"Fight": ("1"),
+                      "Use inventory": ("2"),
+                      "Try to escape": ("3"),
+                      }
 PLAYER_ICON = { "head":  "👨",
                 "body": "👕",
                 "legs":  "👖",

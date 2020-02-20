@@ -38,7 +38,7 @@ def create_player():
         "HP": 5,
         "MP": 10,
         "lvl": 1,
-        "experience": 20,
+        "experience": 0,
         "max_experience": 100,    # Exp needed to lvl up
         "intelligence": 1,   # Stat making spells and potions deal/heal more
         "strength": 1,      # Stat increasing attack dmg
@@ -127,6 +127,7 @@ def main(player, board):
             stats.level_up(player)
     elif key in KEY_BINDINGS["stats"]:
         stats.display_advenced_stats(player)  # Display stats like attack dmg
+        engine.fight_with_monsters(player)
         pass
     elif key in KEY_BINDINGS["exit"]:
         return
