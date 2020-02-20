@@ -6,7 +6,7 @@ import stats
 
 
 def init():
-    player = create_player()
+    player = stats.create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON)
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
     board = engine.draw_walls_and_background(board, WALL, BACKGROUND)
     board = engine.generate_random_things_on_map(board, GRASS, 20, 5)
@@ -19,36 +19,6 @@ def init():
     board = engine.generate_random_things_on_map(board, TREE4, 4, 3)
     #board = engine.generate_random_things_on_map(board, BUSH, 2, 2)
     main(player, board)
-
-
-def create_player():
-    '''
-    Creates a 'player' dictionary for storing all player related informations - i.e. player icon, player position.
-    Fell free to extend this dictionary!
-
-    Returns:
-    dictionary
-    '''
-    player = {
-        "x": PLAYER_START_X,
-        "y": PLAYER_START_Y,
-        "icon": PLAYER_ICON,
-        "height": 3,
-        "width": 5, # body + 2 arms, emojis are wider than single character
-        "HP": 5,
-        "MP": 10,
-        "lvl": 1,
-        "experience": 0,
-        "max_experience": 100,    # Exp needed to lvl up
-        "intelligence": 1,   # Stat making spells and potions deal/heal more
-        "strength": 1,      # Stat increasing attack dmg
-        "endurance": 1,     # Stat increasing max carry and max hp
-        "charisma": 1,      # Make it possible to get bonuses from events
-        "max_hp": 10,
-        "max_player_carry": 10,    # Maximum carrying size
-        "attack": 1   # Dmg Player deal to enemies
-    }
-    return player
 
 
 def main(player, board):
