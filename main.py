@@ -11,8 +11,8 @@ def init():
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT, "map1")
     clear_screen(0)
 
-    ui.show_logo_animation(LOGO)
-    ui.show_story()
+    #ui.show_logo_animation(LOGO)
+    #ui.show_story()
 
     main(player, board)
 
@@ -100,7 +100,7 @@ def main(player, board):
     elif key in KEY_BINDINGS["story"]:
         ui.show_story()
     elif key in KEY_BINDINGS["verbal_attack"]:
-        word_used = ui.verbal_attack(board_with_player, player, word_used)
+        word_used, board = ui.verbal_attack(board_with_player, board, player, word_used)
         key_pressed()
     elif key in KEY_BINDINGS["generator"]:
         engine.generate_new_map(board, player)

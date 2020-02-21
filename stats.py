@@ -1,4 +1,5 @@
 import main
+import asciiart
 from const import *
 from helpers import clear_screen
 player_score = 0
@@ -82,7 +83,7 @@ def small_taking_dmg(player):  # Dmg small monster deal to Player
     print("Player took dmg -" + str(small_monster_dmg) + "HP")
     if player["HP"] <= 0:
         clear_screen()
-        print("Przegrana")
+        game_over()
         input()
         raise SystemExit
 
@@ -92,7 +93,7 @@ def large_taking_dmg(player):  # Dmg large monster deal to Player
     print("Player took dmg -" + str(large_monster_dmg) + "HP")
     if player["HP"] <= 0:
         clear_screen()
-        print("Przegrana")
+        game_over()
         input()
         raise SystemExit
 
@@ -101,5 +102,16 @@ def boss_taking_dmg(player):  # Dmg Boss deal to Player
     player["HP"] -= boss_monster_dmg
     print("Player took dmg -" + str(boss_monster_dmg) + "HP")
     if player["HP"] <= 0:
-        print("Przegrana")
+        game_over()
         raise SystemExit
+
+
+def game_over():
+    # print(colored(asciiart.game_over, 'red', attrs=[]))
+    empty_space = 5 * "\n"
+
+    os.system('clear')
+    print(empty_space)
+    for pictureLine in asciiart.game_over.splitlines():
+        print(colored(pictureLine.center(shutil.get_terminal_size().columns),'red', attrs=[]))
+    play_again()

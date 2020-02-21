@@ -1,4 +1,4 @@
-import art
+import asciiart
 import os
 import time
 import ui
@@ -21,7 +21,7 @@ def print_menu():
     user_input = input("PRESS ENTER TO START".center(shutil.get_terminal_size().columns))
 
     if user_input == "":
-        show_animation(art.swing, art.orphan)
+        show_animation(asciiart.swing, asciiart.orphan)
     # elif user_input == "2":
     #     # engine.customize_character(player)
     # elif user_input == "0":
@@ -32,7 +32,7 @@ def print_menu():
 
 def show_intro(list_with_picture):
     os.system('clear')
-    t = 1
+    t = 0.5
     empty_space = 5 * "\n"
     
     for picture in list_with_picture:
@@ -61,21 +61,7 @@ def show_animation(swing, orphan):
         time.sleep(t)
 
     main.init()
-
-
-def game_over():
-    # print(colored(art.game_over, 'red', attrs=[]))
-    empty_space = 5 * "\n"
-
-    os.system('clear')
-    print(empty_space)
-    for pictureLine in art.game_over.splitlines():
-        print(colored(pictureLine.center(shutil.get_terminal_size().columns),'red', attrs=[]))
-    play_again()
-    
-
-    
-    
+   
 
 def win():
 
@@ -90,7 +76,7 @@ def win():
         time.sleep(2)
         os.system('clear')
     print(empty_space)
-    for pictureLine in art.heart_lynx.splitlines():
+    for pictureLine in asciiart.heart_lynx.splitlines():
         print(pictureLine.center(shutil.get_terminal_size().columns))
     play_again()
 
@@ -117,7 +103,7 @@ def play_again():
 
 #     helpers.clear_screen()
 
-#     #picture = art.picture
+#     #picture = asciiart.picture
 #     lineList = picture.splitlines()
 
 #     artWidth = len(lineList[1])

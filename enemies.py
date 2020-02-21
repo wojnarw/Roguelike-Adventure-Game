@@ -124,6 +124,7 @@ def fight_with_monsters_small(player):
                 stats.small_monster_hp = 0
                 print("Press enter")
                 key_pressed()
+                return False
             elif random.choice(chance_to_escape) == "fail":
                 print("Failed")
                 stats.small_taking_dmg(player)
@@ -229,6 +230,7 @@ def fight_with_monsters_large(player):
                 stats.large_monster_hp = 0
                 print("Press enter")
                 key_pressed()
+                return False
             elif random.choice(chance_to_escape) == "fail":
                 print("Failed")
                 stats.large_taking_dmg(player)
@@ -333,7 +335,7 @@ def fight_with_monsters_boss(player):
                 print("You escaped")
                 print("Press enter")
                 key_pressed()
-                return
+                return False
             elif random.choice(chance_to_escape) == "fail":
                 print("Failed")
                 stats.boss_taking_dmg(player)

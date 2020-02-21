@@ -206,7 +206,7 @@ def show_story():
     key_pressed()
 
 
-def verbal_attack(board_with_player, player, used):
+def verbal_attack(board_with_player, board, player, used):
 
     texts = ["Nie sąd cię skaże wiedźmi sługo",
              "Widziałem cię w Żabce na kasie",
@@ -224,7 +224,12 @@ def verbal_attack(board_with_player, player, used):
         print(choose)
 
     player_say(board_with_player, player, texts[choose])
-    return choose
+
+    if board[player["y"]+2][player["x"]] in const.ENEMIES["icons"]:
+        board[player["y"]+3][player["x"]] = board[player["y"]+2][player["x"]]
+        board[player["y"]+2][player["x"]] = " "
+
+    return choose, board
 
 
 def player_say(board_with_player, player, sentence):
