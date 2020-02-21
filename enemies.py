@@ -6,17 +6,20 @@ import ui
 from helpers import key_pressed, clear_screen
 from const import *
 
+
 def small_monster_kill(player):
     stats.monsters_kill += 1
     stats.player_score += 10
     player["experience"] += 20
     return True
     
+
 def large_monster_kill(player):
     stats.monsters_kill += 1
     stats.player_score += 30
     player["experience"] += 50
     return True
+
 
 def boss_monster_kill(player):
     stats.monsters_kill += 1
@@ -127,9 +130,8 @@ def fight_with_monsters_small(player):
                 fight_with_monsters_small(player)
         if key not in KEY_BINDINGS_FIGHT:
             fight_with_monsters_small(player)
-
     return True
-    
+
 
 def fight_with_monsters_large(player):
     while stats.large_monster_hp > 0:
@@ -233,7 +235,6 @@ def fight_with_monsters_large(player):
                 fight_with_monsters_large(player)
         if key not in KEY_BINDINGS_FIGHT:
             fight_with_monsters_large(player)
-
     return True
 
 
