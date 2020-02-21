@@ -15,19 +15,22 @@ def print_menu():
     helpers.clear_screen()
     empty_space = 7 * "\n"
     print(empty_space)
-    print(colored(const.LOGO[1], 'yellow', attrs=[]))
+    #print(colored(const.LOGO[1], 'yellow', attrs=[]))
+    ui.show_logo_animation(asciiart.LOGO, True)
     print(empty_space)
 
-    user_input = input("PRESS ENTER TO START".center(shutil.get_terminal_size().columns))
+    print(colored("PRESS ANY KEY TO START", "white", attrs=['bold', 'blink']).center(shutil.get_terminal_size().columns))
 
-    if user_input == "":
-        show_animation(asciiart.swing, asciiart.orphan)
+    helpers.key_pressed()
+    ui.show_logo_animation(asciiart.LOGO, False)
+    show_animation(asciiart.swing, asciiart.orphan)
+
     # elif user_input == "2":
     #     # engine.customize_character(player)
     # elif user_input == "0":
     #     # sys.exit(0)
-    else:
-        raise KeyError("There is no such option.")
+    #else:
+    #    raise KeyError("There is no such option.")
 
 
 def show_intro(list_with_picture):

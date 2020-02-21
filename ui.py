@@ -247,30 +247,30 @@ def player_say(board_with_player, player, sentence):
     clear_screen()
     display_board(board_with_player, player)
 
-def show_logo_animation(logo):
+def show_logo_animation(logo, forward = "True"):
 
     # time delay in seconds
     animation_delay = 0.2
     full_logo_delay = 1.5
 
-    clear_screen()
     time.sleep(full_logo_delay)
 
-    for i in range(3,-1,-1):
-        clear_screen()
-        print("\n\n")
-        print(colored(logo[i], 'yellow', attrs=[]))
-        time.sleep(animation_delay)
+    if forward:
+        for i in range(3,-1,-1):
+            clear_screen()
+            print("\n\n")
+            print(colored(logo[i], 'yellow', attrs=[]))
+            time.sleep(animation_delay)
 
-    time.sleep(full_logo_delay)
-
-    for i in range(4):
-        clear_screen()
-        print("\n\n")
-        print(colored(logo[i], 'yellow', attrs=[]))
-        time.sleep(animation_delay)
+        time.sleep(full_logo_delay)
+    else:
+        for i in range(4):
+            clear_screen()
+            print("\n\n")
+            print(colored(logo[i], 'yellow', attrs=[]))
+            time.sleep(animation_delay)
     
-    clear_screen()
+    #clear_screen()
     time.sleep(animation_delay)
 
 """def show_logo_animation(logo):
