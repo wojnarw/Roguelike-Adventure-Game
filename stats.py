@@ -2,6 +2,8 @@ import main
 import asciiart
 from const import *
 from helpers import clear_screen
+from termcolor import colored
+import shutil
 player_score = 0
 monsters_kill = 0
 small_monster_hp = ENEMIES["small"]["HP"]
@@ -110,8 +112,8 @@ def game_over():
     # print(colored(asciiart.game_over, 'red', attrs=[]))
     empty_space = 5 * "\n"
 
-    os.system('clear')
+    clear_screen()
     print(empty_space)
     for pictureLine in asciiart.game_over.splitlines():
-        print(colored(pictureLine.center(shutil.get_terminal_size().columns),'red', attrs=[]))
-    play_again()
+        print(colored(pictureLine.center(shutil.get_terminal_size().columns),'red', attrs=["bold"]))
+    print("\n\tDo you want to play again?")
