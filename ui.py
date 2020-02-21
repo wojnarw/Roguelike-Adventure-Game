@@ -4,28 +4,42 @@ import math
 import random
 import const
 import asciiart
-from helpers import clear_screen
+from helpers import clear_screen, key_pressed
 from termcolor import colored
 
-color_key = {
+color_variants = [{
         '█': "blue",
         '░': "red",
         '▒': "green",
         '▓': "green",
-        '|': "red",
-        'Y': "red",
-        '∏': "red",
-        '\\': "green",
-        '/': "green",
         'ˇ': "green",
+        'Ψ': "green"
+        },
+        {
+        '█': "cyan",
+        '░': "red",
+        '▒': "green",
+        '▓': "green",
+        'ˇ': "yellow",
+        'Ψ': "yellow",},
+        ]
+
+color_key = {
         '˯': "green",
         'ˬ': "green",
-        '^': "green",
         '‡': "yellow",
         '║': "yellow",
+        '▀': "magenta",
+        '▄': "blue",
+        "●": "yellow",
+        "▌": "magenta",
+        "▐": "magenta",
         const.ENEMIES["big"]["icon"]: "red",
         const.ENEMIES["small"]["icon"]: "red"
         }
+
+color_key.update(color_variants[0])
+#color_key.update(color_variants[1])
 
 def display_board(board, player):
     '''
@@ -158,8 +172,10 @@ def show_overlay(board, table=["sword","ring","lala"], show_indexes = True):
 
 def show_story():
 
+    time.sleep(1)
+
     text_movement_delay = 3
-    animation_delay = 0.5
+    animation_delay = 0.3
 
     story = []
     story.append("The night was cold, I wrapped myself in thick blanket and tried to sleep. ") 
@@ -179,14 +195,15 @@ def show_story():
 
         time.sleep(text_movement_delay)
 
-    for i in range(1,10):
+    for i in range(1,15):
         print(empty_space)
         for e in range(len(text)):
             print(text[e].center(shutil.get_terminal_size().columns))
         print(asciiart.FACE2[i % 2])
         time.sleep(animation_delay)
         
-    input()
+    print("Press any key".center(shutil.get_terminal_size().columns))
+    key_pressed()
 
 
 def verbal_attack(board_with_player, player, used):
@@ -234,15 +251,17 @@ def show_logo_animation(logo):
     clear_screen()
     time.sleep(full_logo_delay)
 
-    for i in range(2,-1,-1):
+    for i in range(3,-1,-1):
         clear_screen()
+        print("\n\n")
         print(colored(logo[i], 'yellow', attrs=[]))
         time.sleep(animation_delay)
 
     time.sleep(full_logo_delay)
 
-    for i in range(3):
+    for i in range(4):
         clear_screen()
+        print("\n\n")
         print(colored(logo[i], 'yellow', attrs=[]))
         time.sleep(animation_delay)
     

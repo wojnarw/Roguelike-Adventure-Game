@@ -146,7 +146,7 @@ def draw_walls_and_background(board, WALL, BACKGROUND):
     return board
 
 
-def generate_random_things_on_map(board, item, max_items_in_row = 4, max_items = 100):
+def generate_random_things_on_map(board, item, max_items_in_row = 4, skip_rows = 1):
 
     board_width = len(board[0])
     board_height = len(board)
@@ -183,7 +183,7 @@ def generate_random_things_on_map(board, item, max_items_in_row = 4, max_items =
     elif len(item) == 1:
         item_width = len(item)
 
-        for i in range(1, len(board)-1):
+        for i in range(2, len(board)-1, skip_rows):
             itemsX = random.sample(
                 range(1, board_width - item_width), max_items_in_row)
             for e in range(max_items_in_row):
@@ -217,13 +217,18 @@ def max_player_weight_reached():    # Everytime player tries to store something
 
 def generate_new_map(board, player):
     board = draw_walls_and_background(board, WALL, BACKGROUND)
-    board = generate_random_things_on_map(board, GRASS, 20, 5)
+    board = generate_random_things_on_map(board, GRASS, 20)
+    board = generate_random_things_on_map(board, BUSH, 1, 2)
+    board = generate_random_things_on_map(board, BUSHES[0], 2)
+    board = generate_random_things_on_map(board, BUSHES[1], 2)
+    board = generate_random_things_on_map(board, BUSHES[2], 2)
     board = generate_random_things_on_map(board, CEMENTERY, 1)
     board = generate_random_things_on_map(board, TREES[0], 3)
     board = generate_random_things_on_map(board, TREES[1], 2)
     board = generate_random_things_on_map(board, TREES[2], 3)
-    board = generate_random_things_on_map(board, ENEMIES["small"]["icon"], 1)
-    board = generate_random_things_on_map(board, ENEMIES["big"]["icon"], 1)
+    board = generate_random_things_on_map(board, ENEMIES["small"]["icon"], 1, 7)
+    board = generate_random_things_on_map(board, ENEMIES["big"]["icon"], 1, 9)
+    board = generate_random_things_on_map(board, "●", 1, 15)
 
     player["x"] = PLAYER_START_X
     player["y"] = PLAYER_START_Y

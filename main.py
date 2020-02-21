@@ -10,6 +10,10 @@ def init():
     player = stats.create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON)
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT, "map1")
     clear_screen(0)
+
+    ui.show_logo_animation(LOGO)
+    ui.show_story()
+
     main(player, board)
 
 
@@ -62,6 +66,12 @@ def main(player, board):
             player["x"] += 1
             player["y"] += 1
         
+        # item collisions
+        if board[player["y"]][player["x"]] in PICKUPS or board[player["y"]][player["x"]+1] in PICKUPS:
+            board[player["y"]][player["x"]-1] = " "
+            board[player["y"]][player["x"]] = " "
+            board[player["y"]][player["x"]+1] = " "
+
         fight_result = False
         # enemy collision
         if board[player["y"]][player["x"]] in ENEMIES["small"]["icon"] or board[player["y"]][player["x"]+1] in ENEMIES["small"]["icon"]:
@@ -120,10 +130,9 @@ def main(player, board):
             print("No potions")
         if option == "3":
             #pass
-            player["experience"] += 100   # Cheat
-            player["HP"] += 5
-            player["max_hp"] += 5
-            stats.level_up(player)
+            player["experience"] += 50   # Cheat
+            player["HP"] = 10
+            #stats.level_up(player)
     elif key in KEY_BINDINGS["stats"]:
         stats.display_advenced_stats(player)  # Display stats like attack dmg
         enemies.fight_with_monsters_small(player)

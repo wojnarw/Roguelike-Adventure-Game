@@ -28,7 +28,7 @@ def create_player(PLAYER_START_X, PLAYER_START_Y, PLAYER_ICON):
         "HP": 9,
         "MP": 10,
         "lvl": 1,
-        "experience": 20,
+        "experience": 0,
         "max_experience": 100,    # Exp needed to lvl up
         "intelligence": 1,   # Stat making spells and potions deal/heal more
         "strength": 1,      # Stat increasing attack dmg

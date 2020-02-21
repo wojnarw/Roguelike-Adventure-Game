@@ -39,5 +39,6 @@ def clear_screen(n = 0):
         os.system('clear')
     else:
         os.system('clear')
-        #print('\033[1A'*n)
+        #print('\033[1A'*n) # <--
+
         #print('\b'*n)
