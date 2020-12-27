@@ -1,5 +1,8 @@
 # Roguelike
 
+![image](https://user-images.githubusercontent.com/50807860/103161409-cb5cc380-47e1-11eb-814d-44db7353c3d1.png)
+
+
 ## Story
 
 "La Speluna", a company from San Escobar contacted Codecool and asked about creating a roguelike game for them. They didn't tell us much about their needs, only a few details about the game's framework. They are big fans of old-fashioned RPG games when graphics didn't matter that much, but the most important things were gameplay and a story.
