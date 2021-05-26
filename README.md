@@ -1,4 +1,9 @@
-# Roguelike
+# Python Roguelike console game  
+
+Features:
+- random level generator
+- fighting with monsters
+- leveling up
 
 ![image](https://user-images.githubusercontent.com/50807860/103161409-cb5cc380-47e1-11eb-814d-44db7353c3d1.png)
 
